@@ -3,9 +3,12 @@ import { Routes, Route } from "react-router-dom";
 import { auth } from "./lib/firebase";
 import SignUp from "./components/signup";
 import Login from "./components/login";
-import Home from "./components/home";
 import Navbar from "./components/navbar";
 import Settings from "./components/settings";
+import Sell from "./components/Sell/sell";
+import Home from "./components/home";
+import ProductInfo from "./components/Product/productInfo";
+import ProductByCategory from "./components/Product/productsbycategory";
 
 function App() {
   const [userName, setUserName] = useState("");
@@ -31,7 +34,10 @@ function App() {
           <Route path="/Login" element={<Login />} />
           <Route path="/Signup" element={<SignUp />} />
           <Route path="/settings" element={<Settings />} />
-          <Route path="/" element={<Home name={userName} />} />
+          <Route path="/sell" element={<Sell />} />
+          <Route path="/items/:id" element={<ProductInfo />} />
+          <Route path="/category/:category" element={<ProductByCategory />} />
+          <Route path="/" element={<Home />} />
         </Routes>
       </div>
     </>

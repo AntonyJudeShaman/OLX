@@ -80,7 +80,7 @@ const Navbar: React.FC = () => {
             <Link to={"/Signup"}>
               <Button className="text-md">Login</Button>
             </Link>
-            <Link to={"/Login"}>
+            <Link to={"/sell"}>
               <Button className="bg-green-600 px-8 text-md">Sell</Button>
             </Link>
           </>
