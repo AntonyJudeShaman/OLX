@@ -1,10 +1,21 @@
 const express = require("express");
 const User = require("../models/user");
 const router = express.Router();
+const bcrypt = require("bcrypt");
 
 router.post("/", async (req, res) => {
   try {
-    const user = new User(req.body);
+    const { id, name, username, email, password, userType } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = new User({
+      id: id,
+      name: name,
+      username: username,
+      email: email,
+      hashedPassword: hashedPassword,
+      userType: userType,
+    });
     await user.save();
     res.status(201).json(user);
   } catch (err) {
@@ -23,7 +34,7 @@ router.get("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
+    const user = await User.findOne({ id: req.params.id });
     if (!user) return res.status(404).json({ error: "User not found" });
     res.status(200).json(user);
   } catch (err) {
@@ -33,7 +44,7 @@ router.get("/:id", async (req, res) => {
 
 router.put("/:id", async (req, res) => {
   try {
-    const user = await User.findByIdAndUpdate(req.params.id, req.body, {
+    const user = await User.findOneAndUpdate({ id: req.params.id }, req.body, {
       new: true,
     });
     if (!user) return res.status(404).json({ error: "User not found" });
@@ -45,7 +56,7 @@ router.put("/:id", async (req, res) => {
 
 router.delete("/:id", async (req, res) => {
   try {
-    const user = await User.findByIdAndDelete(req.params.id);
+    const user = await User.findOneAndDelete({ id: req.params.id });
     if (!user) return res.status(404).json({ error: "User not found" });
     res.status(200).json({ message: "User deleted" });
   } catch (err) {

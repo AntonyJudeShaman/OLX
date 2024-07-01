@@ -5,6 +5,7 @@ import SignUp from "./components/signup";
 import Login from "./components/login";
 import Home from "./components/home";
 import Navbar from "./components/navbar";
+import Settings from "./components/settings";
 
 function App() {
   const [userName, setUserName] = useState("");
@@ -29,6 +30,7 @@ function App() {
         <Routes>
           <Route path="/Login" element={<Login />} />
           <Route path="/Signup" element={<SignUp />} />
+          <Route path="/settings" element={<Settings />} />
           <Route path="/" element={<Home name={userName} />} />
         </Routes>
       </div>

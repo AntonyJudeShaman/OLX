@@ -2,10 +2,16 @@ const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema(
   {
+    id: {
+      type: String,
+    },
     username: {
       type: String,
       required: true,
       unique: true,
+    },
+    name: {
+      type: String,
     },
     email: {
       type: String,
@@ -14,15 +20,22 @@ const userSchema = new mongoose.Schema(
     },
     hashedPassword: {
       type: String,
-      required: true,
     },
     userType: {
       type: String,
       enum: ["buyer", "seller", "admin"],
-      required: true,
     },
     profilePicture: {
       type: String,
+    },
+    bio: {
+      type: String,
+    },
+    location: {
+      type: String,
+    },
+    phone: {
+      type: Number,
     },
     createdAt: {
       type: Date,

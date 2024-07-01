@@ -13,54 +13,77 @@ import {
 } from "./ui/card";
 import { Input } from "./ui/input";
 import MyToast from "./ui/my-toast";
-import { hashPassword } from "../lib/utils";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
 
 const SignUp = () => {
   const navigate = useNavigate();
   const [values, setValues] = useState({
+    username: "",
     email: "",
     password: "",
     name: "",
+    userType: "buyer",
   });
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setLoading(true);
     if (!values.email || !values.password || !values.name) {
       setErrorMessage("Please fill all fields");
+      setLoading(false);
       return;
-    } else {
-      setErrorMessage("");
-      createUserWithEmailAndPassword(auth, values.email, values.password)
-        .then(async (res) => {
-          const user = res.user;
-          await updateProfile(user, {
-            displayName: values.name,
-          });
-          const newUser = await fetch("http://localhost:10000/user/", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              id: user.uid,
-              name: values.name,
-              email: values.email,
-              password: hashPassword(values.password),
-            }),
-          });
-          if (!newUser.ok) {
-            MyToast({ message: "Cannot create an account", type: "error" });
-          }
-          MyToast({ message: "User created successfully", type: "success" });
-          navigate("/");
-        })
-        .catch((error) => {
-          setErrorMessage(error.message);
-        });
     }
-    setLoading(false);
+
+    try {
+      const user = await createUserWithEmailAndPassword(
+        auth,
+        values.email,
+        values.password
+      );
+
+      const newUserResponse = await fetch("http://localhost:10000/api/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: user.user.uid,
+          username: values.username,
+          name: values.name,
+          email: values.email,
+          password: values.password,
+          userType: values.userType,
+        }),
+      });
+
+      if (!newUserResponse.ok) {
+        const user = auth.currentUser;
+        user?.delete().then(() => {
+          MyToast({ message: "Cannot create an account", type: "error" });
+        });
+      } else {
+        await updateProfile(user.user, {
+          displayName: values.name,
+        });
+
+        MyToast({ message: "User created successfully", type: "success" });
+        navigate("/");
+      }
+    } catch (error: any) {
+      setErrorMessage(error.message);
+      MyToast({ message: "Cannot create an account", type: "error" });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -76,6 +99,11 @@ const SignUp = () => {
           <Input
             type="text"
             placeholder="Enter a username"
+            onChange={(e) => setValues({ ...values, username: e.target.value })}
+          />
+          <Input
+            type="text"
+            placeholder="Enter your name"
             onChange={(e) => setValues({ ...values, name: e.target.value })}
           />
           <Input
@@ -88,6 +116,23 @@ const SignUp = () => {
             placeholder="Enter a password"
             onChange={(e) => setValues({ ...values, password: e.target.value })}
           />
+          <Select
+            onValueChange={(e: any) =>
+              setValues({ ...values, userType: e.target.value })
+            }
+            defaultValue="buyer"
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select a fruit" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>User Type</SelectLabel>
+                <SelectItem value="seller">Seller</SelectItem>
+                <SelectItem value="buyer">Buyer</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
           {errorMessage && (
             <p className="text-red-500 text-sm flex justify-center">
               {errorMessage}
