@@ -46,17 +46,21 @@ const Login = () => {
     <div className="min-h-full">
       <Card className="max-w-sm md:max-w-md mt-[5rem] rounded-2xl flex flex-col justify-center mx-auto">
         <CardHeader>
-          <CardTitle>Login</CardTitle>
-          <CardDescription>Please provide credentials to login</CardDescription>
+          <CardTitle className="font-bold text-3xl">Login</CardTitle>
+          <CardDescription className="text-md">
+            Please provide credentials to login
+          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <Input
             type="email"
+            className="text-md"
             placeholder="Enter an email"
             onChange={(e) => setValues({ ...values, email: e.target.value })}
           />
           <Input
             type="password"
+            className="text-md"
             placeholder="Enter a password"
             onChange={(e) => setValues({ ...values, password: e.target.value })}
           />
@@ -65,13 +69,20 @@ const Login = () => {
               {errorMessage}
             </p>
           )}
+          <p className="flex float-end hover:underline cursor-pointer">
+            Forgot Password?
+          </p>
         </CardContent>
         <CardFooter className="flex flex-col mx-auto">
-          <Button onClick={handleSubmit} type="submit" className="w-full">
+          <Button
+            onClick={handleSubmit}
+            type="submit"
+            className="w-full text-md"
+          >
             {loading ? "Logging in..." : "Login"}
           </Button>
           <p className="mt-5">
-            Already have an account?
+            Don&apos;t have an account?
             <span className="px-2 hover:underline">
               <Link to={"/Signup"}>Signup</Link>
             </span>

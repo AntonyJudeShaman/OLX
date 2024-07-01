@@ -22,6 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
+import { cn } from "../lib/utils";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -86,53 +87,61 @@ const SignUp = () => {
     }
   };
 
+  const handleUserTypeChange = (e: any) => {
+    setValues({ ...values, userType: e.target.value });
+  };
+
   return (
     <div className="min-h-full">
       <Card className="max-w-sm md:max-w-md mt-[5rem] rounded-2xl flex flex-col justify-center mx-auto">
         <CardHeader>
-          <CardTitle>Signup</CardTitle>
-          <CardDescription>
+          <CardTitle className="font-bold text-3xl">Signup</CardTitle>
+          <CardDescription className="text-md">
             Please provide credentials for signup
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <Input
+            className="bg-popover text-popover-foreground shadow-md"
             type="text"
             placeholder="Enter a username"
             onChange={(e) => setValues({ ...values, username: e.target.value })}
           />
           <Input
+            className="bg-popover text-popover-foreground shadow-md"
             type="text"
             placeholder="Enter your name"
             onChange={(e) => setValues({ ...values, name: e.target.value })}
           />
           <Input
+            className="bg-popover text-popover-foreground shadow-md"
             type="email"
             placeholder="Enter an email"
             onChange={(e) => setValues({ ...values, email: e.target.value })}
           />
           <Input
+            className="bg-popover text-popover-foreground shadow-md"
             type="password"
             placeholder="Enter a password"
             onChange={(e) => setValues({ ...values, password: e.target.value })}
           />
-          <Select
-            onValueChange={(e: any) =>
-              setValues({ ...values, userType: e.target.value })
-            }
-            defaultValue="buyer"
+          <select
+            className={cn(
+              "h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)]",
+              "py-1.5 pl-8 pr-2 text-sm bg-popover text-popover-foreground shadow-md",
+              "relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+              "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 "
+            )}
+            value={values.userType}
+            onChange={(e) => setValues({ ...values, userType: e.target.value })}
           >
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select a fruit" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>User Type</SelectLabel>
-                <SelectItem value="seller">Seller</SelectItem>
-                <SelectItem value="buyer">Buyer</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+            <option className="font-semibold" disabled value="">
+              Select an option
+            </option>
+            <option value="buyer">I am here to buy products</option>
+            <option value="seller">I am here to sell products</option>
+          </select>
+
           {errorMessage && (
             <p className="text-red-500 text-sm flex justify-center">
               {errorMessage}

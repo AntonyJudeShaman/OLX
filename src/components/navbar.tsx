@@ -33,7 +33,9 @@ const Navbar: React.FC = () => {
       <div>
         {" "}
         <p className="font-extrabold text-2xl">
-          OL<span className="font-extrabold text-lg">X</span>
+          <Link to="/">
+            OL<span className="font-extrabold text-lg">X</span>
+          </Link>
         </p>
       </div>
       <div className="space-x-6">
