@@ -85,8 +85,6 @@ export default function Sell() {
     return imageURLs;
   };
 
-  const user = auth.currentUser;
-
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
