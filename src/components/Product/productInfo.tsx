@@ -4,6 +4,7 @@ import { Button } from "../ui/button";
 import SimilarProducts from "./similarproducts";
 
 interface Product {
+  _id?: string;
   userId?: string;
   title: string;
   description: string;
@@ -13,6 +14,7 @@ interface Product {
 }
 
 interface User {
+  id?: string;
   name: string;
   phone: string;
 }
@@ -111,11 +113,20 @@ const ProductInfo = () => {
                   </p>
                   <p className="text-lg">Name: {user.name}</p>
                   <p className="text-lg">Phone no: {user.phone}</p>
-                  <Link to={`/chat/${product.userId}`}>
-                    <Button className="text-md mt-3" size="lg">
-                      Message Seller
-                    </Button>
-                  </Link>
+
+                  {product.userId === user.id ? (
+                    <Link to={`/edit-item/${product._id}`}>
+                      <Button className="text-md mt-3" size="lg">
+                        Edit Product
+                      </Button>
+                    </Link>
+                  ) : (
+                    <Link to={`/chat/${product.userId}`}>
+                      <Button className="text-md mt-3" size="lg">
+                        Message Seller
+                      </Button>
+                    </Link>
+                  )}
                 </div>
               )}
             </div>

@@ -31,6 +31,21 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+router.get("/user/:userId", async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const items = await Item.find({ userId: userId });
+
+    if (!items || items.length === 0) {
+      return res.status(404).json({ error: "Items not found for this user" });
+    }
+
+    res.status(200).json(items);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 router.get("/category/:category", async (req, res) => {
   try {
     const category = req.params.category;

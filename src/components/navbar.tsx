@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { Settings } from "lucide-react";
+import { Settings, User } from "lucide-react";
 import { signOut } from "firebase/auth";
 import { auth } from "../lib/firebase";
 
@@ -60,13 +60,19 @@ const Navbar: React.FC = () => {
                 {user?.displayName}
               </DropdownMenuItem>
               <DropdownMenuSeparator />
+              <Link to="/profile">
+                <DropdownMenuItem className="flex text-sm h-8 rounded-lg items-center cursor-pointer">
+                  <User className="size-5 mr-2" />
+                  Profile
+                </DropdownMenuItem>
+              </Link>
+              <DropdownMenuSeparator />
               <Link to="/settings">
                 <DropdownMenuItem className="flex text-sm h-8 rounded-lg items-center cursor-pointer">
                   <Settings className="size-5 mr-2" />
                   Settings
                 </DropdownMenuItem>
               </Link>
-
               <DropdownMenuSeparator />
               <DropdownMenuItem className="text-sm h-8 flex items-center rounded-lg cursor-pointer">
                 <Button className="w-full" onClick={() => signout()}>

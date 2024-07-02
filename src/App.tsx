@@ -1,6 +1,4 @@
-import { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
-import { auth } from "./lib/firebase";
 import SignUp from "./components/signup";
 import Login from "./components/login";
 import Navbar from "./components/navbar";
@@ -9,20 +7,10 @@ import Sell from "./components/Sell/sell";
 import Home from "./components/home";
 import ProductInfo from "./components/Product/productInfo";
 import ProductByCategory from "./components/Product/productsbycategory";
+import UserProfile from "./components/profile";
+import EditItem from "./components/Product/editproduct";
 
 function App() {
-  const [userName, setUserName] = useState("");
-
-  useEffect(() => {
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        setUserName(user.displayName || "");
-      } else {
-        setUserName("");
-      }
-    });
-  }, []);
-
   return (
     <>
       {" "}
@@ -36,7 +24,9 @@ function App() {
           <Route path="/settings" element={<Settings />} />
           <Route path="/sell" element={<Sell />} />
           <Route path="/items/:id" element={<ProductInfo />} />
+          <Route path="/profile" element={<UserProfile />} />
           <Route path="/category/:category" element={<ProductByCategory />} />
+          <Route path="/edit-item/:itemId" element={<EditItem />} />
           <Route path="/" element={<Home />} />
         </Routes>
       </div>
