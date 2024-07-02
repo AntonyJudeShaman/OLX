@@ -35,11 +35,10 @@ const Chat: React.FC = () => {
     price: 0,
   });
 
-  const socket: Socket = io(`http://localhost:10000/`, {
-    transports: ["websocket"],
+  const socket: Socket = io(`https://olx-a4ue.onrender.com/`, {
+    transports: ["websocket", "polling"],
     reconnection: true,
   });
-
   useEffect(() => {
     const fetchMessages = async () => {
       try {
