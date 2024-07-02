@@ -2,52 +2,29 @@ const express = require("express");
 const router = express.Router();
 const Chat = require("../models/chat");
 
+router.get("/:itemId/:buyerId/:sellerId", async (req, res) => {
+  const { itemId, buyerId, sellerId } = req.params;
+  try {
+    const chat = await Chat.findOne({ itemId, buyerId, sellerId });
+    if (!chat) {
+      return res.status(404).json({ error: "Chat not found" });
+    }
+    res.json(chat.messages);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 router.post("/", async (req, res) => {
+  const { itemId, buyerId, sellerId, senderId, message } = req.body;
   try {
-    const chat = new Chat(req.body);
+    let chat = await Chat.findOne({ itemId, buyerId, sellerId });
+    if (!chat) {
+      chat = new Chat({ itemId, buyerId, sellerId, messages: [] });
+    }
+    chat.messages.push({ senderId, message });
     await chat.save();
-    res.status(201).json(chat);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
-});
-
-router.get("/", async (req, res) => {
-  try {
-    const chats = await Chat.find();
-    res.status(200).json(chats);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-router.get("/:id", async (req, res) => {
-  try {
-    const chat = await Chat.findById(req.params.id);
-    if (!chat) return res.status(404).json({ error: "Chat not found" });
-    res.status(200).json(chat);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-router.put("/:id", async (req, res) => {
-  try {
-    const chat = await Chat.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-    });
-    if (!chat) return res.status(404).json({ error: "Chat not found" });
-    res.status(200).json(chat);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-router.delete("/:id", async (req, res) => {
-  try {
-    const chat = await Chat.findByIdAndDelete(req.params.id);
-    if (!chat) return res.status(404).json({ error: "Chat not found" });
-    res.status(200).json({ message: "Chat deleted" });
+    res.json(chat);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

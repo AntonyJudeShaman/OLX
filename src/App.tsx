@@ -9,6 +9,7 @@ import ProductInfo from "./components/Product/productInfo";
 import ProductByCategory from "./components/Product/productsbycategory";
 import UserProfile from "./components/profile";
 import EditItem from "./components/Product/editproduct";
+import Chat from "./components/Chat/chat";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path="/profile" element={<UserProfile />} />
           <Route path="/category/:category" element={<ProductByCategory />} />
           <Route path="/edit-item/:itemId" element={<EditItem />} />
+          <Route path="/chat/:itemId/:buyerId/:sellerId" element={<Chat />} />
           <Route path="/" element={<Home />} />
         </Routes>
       </div>

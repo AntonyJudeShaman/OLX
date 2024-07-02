@@ -118,13 +118,18 @@ const ProductInfo = () => {
                   <p className="text-lg">Phone no: {user.phone}</p>
 
                   {product.userId === userSession?.uid ? (
-                    <Link to={`/edit-item/${product._id}`}>
-                      <Button className="text-md mt-3" size="lg">
-                        Edit Product
-                      </Button>
-                    </Link>
+                    <>
+                      {" "}
+                      <Link to={`/edit-item/${product._id}`}>
+                        <Button className="text-md mt-3" size="lg">
+                          Edit Product
+                        </Button>
+                      </Link>
+                    </>
                   ) : (
-                    <Link to={`/chat/${product.userId}`}>
+                    <Link
+                      to={`/chat/${product._id}/${userSession?.uid}/${product.userId}`}
+                    >
                       <Button className="text-md mt-3" size="lg">
                         Message Seller
                       </Button>
