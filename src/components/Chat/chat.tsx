@@ -35,7 +35,7 @@ const Chat: React.FC = () => {
     price: 0,
   });
 
-  const socket: Socket = io(`https://olx-a4ue.onrender.com/`, {
+  const socket: Socket = io(`${import.meta.env.VITE_API_URLL}`, {
     transports: ["websocket", "polling"],
     reconnection: true,
   });
