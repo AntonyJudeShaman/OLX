@@ -13,15 +13,6 @@ import {
 } from "./ui/card";
 import { Input } from "./ui/input";
 import MyToast from "./ui/my-toast";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "./ui/select";
 import { cn } from "../lib/utils";
 
 const SignUp = () => {
@@ -85,10 +76,6 @@ const SignUp = () => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleUserTypeChange = (e: any) => {
-    setValues({ ...values, userType: e.target.value });
   };
 
   return (

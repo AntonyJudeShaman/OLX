@@ -1,12 +1,9 @@
-// components/ProfileForm.tsx
-
-import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { Label } from "./ui/label";
 import { Button } from "./ui/button";
 import { useAuth } from "../lib/auth";
-import toast from "react-hot-toast";
 import MyToast from "./ui/my-toast";
 
 interface Profile {
@@ -90,8 +87,9 @@ const ProfileForm = () => {
           body: JSON.stringify(changedData), // Assuming changedData is your updated user data
         }
       );
-
-      const responseData = await response.json();
+      if (!response.ok) {
+        throw new Error("Failed to update profile");
+      }
 
       MyToast({
         message: "Profile updated successfully",

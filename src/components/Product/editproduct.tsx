@@ -29,7 +29,7 @@ const EditItem = () => {
     category: "",
     images: [""],
   });
-  const [newImage, setNewImage] = useState<File | null>(null); // Updated to File type
+
   const navigate = useNavigate();
 
   useEffect(() => {
