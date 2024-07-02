@@ -35,7 +35,7 @@ const ProductInfo = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await fetch(`http://localhost:10000/api/items/${id}`);
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/items/${id}`);
         if (!res.ok) {
           throw new Error("Failed to fetch product");
         }
@@ -54,7 +54,7 @@ const ProductInfo = () => {
     const fetchUser = async () => {
       try {
         const res = await fetch(
-          `http://localhost:10000/api/users/${product.userId}`
+          `${import.meta.env.VITE_API_URL}/users/${product.userId}`
         );
         if (!res.ok) {
           throw new Error("Failed to fetch product");

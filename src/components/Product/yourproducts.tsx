@@ -25,7 +25,7 @@ const YourProducts: React.FC<Props> = ({ userId }) => {
     const fetchItemsByUser = async () => {
       try {
         const response = await fetch(
-          `http://localhost:10000/api/items/user/${userId}`
+          `${import.meta.env.VITE_API_URL}/items/user/${userId}`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch items");
@@ -43,7 +43,7 @@ const YourProducts: React.FC<Props> = ({ userId }) => {
   const handleDelete = async (itemId: string) => {
     try {
       const response = await fetch(
-        `http://localhost:10000/api/items/${itemId}`,
+        `${import.meta.env.VITE_API_URL}/items/${itemId}`,
         {
           method: "DELETE",
         }

@@ -1,8 +1,8 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import AllProducts from "./Product/products";
 
 const Home = () => {
+  console.log(import.meta.env.VITE_API_URL);
   return (
     <div className="bg-gray-100 min-h-screen">
       <main className="container mx-auto min-h-full px-4 py-8">

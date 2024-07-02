@@ -14,7 +14,7 @@ export default function AllProducts() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch("http://localhost:10000/api/items", {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/items`, {
           method: "GET",
         });
         const data = await response.json();

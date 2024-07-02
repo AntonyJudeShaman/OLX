@@ -42,20 +42,23 @@ const SignUp = () => {
         values.password
       );
 
-      const newUserResponse = await fetch("http://localhost:10000/api/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          id: user.user.uid,
-          username: values.username,
-          name: values.name,
-          email: values.email,
-          password: values.password,
-          userType: values.userType,
-        }),
-      });
+      const newUserResponse = await fetch(
+        `${import.meta.env.VITE_API_URL}/users`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id: user.user.uid,
+            username: values.username,
+            name: values.name,
+            email: values.email,
+            password: values.password,
+            userType: values.userType,
+          }),
+        }
+      );
 
       if (!newUserResponse.ok) {
         const user = auth.currentUser;

@@ -36,7 +36,7 @@ const EditItem = () => {
     const fetchItem = async () => {
       try {
         const response = await fetch(
-          `http://localhost:10000/api/items/${itemId}`
+          `${import.meta.env.VITE_API_URL}/items/${itemId}`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch item");
@@ -117,7 +117,7 @@ const EditItem = () => {
     e.preventDefault();
     try {
       const response = await fetch(
-        `http://localhost:10000/api/items/${itemId}`,
+        `${import.meta.env.VITE_API_URL}/items/${itemId}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },

@@ -127,7 +127,7 @@ export default function Sell() {
       const user = auth.currentUser;
 
       const uploadProductToDB = await fetch(
-        "http://localhost:10000/api/items",
+        `${import.meta.env.VITE_API_URL}/items`,
         {
           method: "POST",
           headers: {

@@ -25,7 +25,7 @@ const ProfileForm = () => {
     const fetchProfile = async () => {
       try {
         const response = await fetch(
-          `http://localhost:10000/api/users/${user?.uid}`,
+          `${import.meta.env.VITE_API_URL}/users/${user?.uid}`,
           {
             method: "GET",
             headers: {
@@ -78,7 +78,7 @@ const ProfileForm = () => {
     console.log("Changed data:", changedData);
     try {
       const response = await fetch(
-        `http://localhost:10000/api/users/${user?.uid}`,
+        `${import.meta.env.VITE_API_URL}/users/${user?.uid}`,
         {
           method: "PUT",
           headers: {
