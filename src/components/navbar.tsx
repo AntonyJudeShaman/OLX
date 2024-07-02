@@ -84,7 +84,7 @@ const Navbar: React.FC = () => {
         ) : (
           <>
             <Link to={"/Signup"}>
-              <Button className="text-md">Login</Button>
+              <Button className="text-md">Signup</Button>
             </Link>
             <Link to={"/sell"}>
               <Button className="bg-green-600 px-8 text-md">Sell</Button>

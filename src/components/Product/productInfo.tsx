@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Button } from "../ui/button";
 import SimilarProducts from "./similarproducts";
+import { auth } from "../../lib/firebase";
 
 interface Product {
   _id?: string;
@@ -31,6 +32,8 @@ const ProductInfo = () => {
   const [user, setUser] = useState<User>({ name: "", phone: "" });
 
   let { id } = useParams<{ id: string }>();
+
+  const userSession = auth.currentUser;
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -114,7 +117,7 @@ const ProductInfo = () => {
                   <p className="text-lg">Name: {user.name}</p>
                   <p className="text-lg">Phone no: {user.phone}</p>
 
-                  {product.userId === user.id ? (
+                  {product.userId === userSession?.uid ? (
                     <Link to={`/edit-item/${product._id}`}>
                       <Button className="text-md mt-3" size="lg">
                         Edit Product

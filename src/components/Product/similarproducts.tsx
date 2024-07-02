@@ -19,10 +19,12 @@ interface Props {
 
 const SimilarProducts: React.FC<Props> = ({ category, className }) => {
   const [items, setItems] = useState<Item[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchItemsByCategory = async () => {
       try {
+        setLoading(true);
         const response = await fetch(
           `${import.meta.env.VITE_API_URL}/items/category/${category}`
         );
@@ -31,10 +33,9 @@ const SimilarProducts: React.FC<Props> = ({ category, className }) => {
         }
         const data = await response.json();
         setItems(data);
+        setLoading(false);
       } catch (error) {
-        if (items.length !== 0) {
-          MyToast({ message: "Error fetching items", type: "error" });
-        }
+        setLoading(false);
       }
     };
 
@@ -43,7 +44,7 @@ const SimilarProducts: React.FC<Props> = ({ category, className }) => {
 
   return (
     <div className={cn("mx-auto w-full py-12", className)}>
-      {items.length === 0 ? (
+      {!loading && items.length === 0 ? (
         <p className="text-center text-xl text-muted-foreground border border-red-400 bg-red-200 text-red-800 font-bold rounded-2xl p-10 mx-auto my-auto">
           No products founds in this category. Please try again.
         </p>

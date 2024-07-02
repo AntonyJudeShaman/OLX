@@ -15,6 +15,7 @@ import { MinusIcon, PlusIcon } from "lucide-react";
 import { app, auth } from "../../lib/firebase";
 import toast from "react-hot-toast";
 import MyToast from "../ui/my-toast";
+import { useNavigate } from "react-router-dom";
 
 interface Product {
   title: string;
@@ -32,6 +33,8 @@ export default function Sell() {
     category: "",
     images: [],
   });
+
+  const user = auth.currentUser;
 
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -122,8 +125,6 @@ export default function Sell() {
         },
       });
 
-      const user = auth.currentUser;
-
       const uploadProductToDB = await fetch(
         `${import.meta.env.VITE_API_URL}/items`,
         {
@@ -163,113 +164,128 @@ export default function Sell() {
     }
   };
 
+  const navigate = useNavigate();
+
   return (
     <div className="flex flex-col min-h-screen">
-      <main className="flex-1 bg-muted/40 p-4 md:p-6">
-        <div className="container mx-auto max-w-4xl">
-          <h1 className="text-3xl font-bold mb-4">Create a new product</h1>
-          <form onSubmit={handleSubmit} className="grid gap-4">
-            <div className="grid gap-2">
-              <Label htmlFor="title">Title</Label>
-              <Input
-                id="title"
-                name="title"
-                type="text"
-                value={product.title}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="description">Description</Label>
-              <Textarea
-                id="description"
-                name="description"
-                value={product.description}
-                onChange={handleInputChange}
-                required
-                className="min-h-[100px]"
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
+      {user?.uid ? (
+        <main className="flex-1 bg-muted/40 p-4 md:p-6">
+          <div className="container mx-auto max-w-4xl">
+            <h1 className="text-3xl font-bold mb-4">Create a new product</h1>
+            <form onSubmit={handleSubmit} className="grid gap-4">
               <div className="grid gap-2">
-                <Label htmlFor="price">Price</Label>
+                <Label htmlFor="title">Title</Label>
                 <Input
-                  id="price"
-                  name="price"
-                  type="number"
-                  value={product.price}
+                  id="title"
+                  name="title"
+                  type="text"
+                  value={product.title}
                   onChange={handleInputChange}
                   required
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="category">Category</Label>
-                <Select
-                  name="category"
-                  value={product.category}
+                <Label htmlFor="description">Description</Label>
+                <Textarea
+                  id="description"
+                  name="description"
+                  value={product.description}
+                  onChange={handleInputChange}
                   required
-                  onValueChange={handleSelectInputChange}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="clothing">Clothing</SelectItem>
-                    <SelectItem value="electronics">Electronics</SelectItem>
-                    <SelectItem value="furniture">Furniture</SelectItem>
-                    <SelectItem value="sports">Sports</SelectItem>
-                    <SelectItem value="home appliances">
-                      Home Appliances
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
+                  className="min-h-[100px]"
+                />
               </div>
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="images">Images</Label>
-              <div className="grid grid-cols-3 gap-2">
-                {product.images.map((image, index) => (
-                  <div
-                    key={index}
-                    className="relative overflow-hidden rounded-md"
-                  >
-                    <img
-                      src={URL.createObjectURL(image)}
-                      alt={`Image ${index + 1}`}
-                      className="object-cover"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => handleImageRemoval(index)}
-                      className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full"
-                    >
-                      <MinusIcon className="h-4 w-4" />
-                    </button>
-                  </div>
-                ))}
-                <label
-                  htmlFor="image-upload"
-                  className="flex aspect-square items-center justify-center rounded-md border-2 border-dashed border-muted-foreground cursor-pointer"
-                >
-                  <PlusIcon className="h-6 w-6 text-muted-foreground" />
-                  <input
-                    id="image-upload"
-                    type="file"
-                    multiple
-                    accept="image/*"
-                    className="hidden"
-                    onChange={handleImageUpload}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="grid gap-2">
+                  <Label htmlFor="price">Price</Label>
+                  <Input
+                    id="price"
+                    name="price"
+                    type="number"
+                    value={product.price}
+                    onChange={handleInputChange}
+                    required
                   />
-                </label>
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="category">Category</Label>
+                  <Select
+                    name="category"
+                    value={product.category}
+                    required
+                    onValueChange={handleSelectInputChange}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="clothing">Clothing</SelectItem>
+                      <SelectItem value="electronics">Electronics</SelectItem>
+                      <SelectItem value="furniture">Furniture</SelectItem>
+                      <SelectItem value="sports">Sports</SelectItem>
+                      <SelectItem value="home appliances">
+                        Home Appliances
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
-            </div>
-            <Button type="submit" className="w-full">
-              Create Product
+              <div className="grid gap-2">
+                <Label htmlFor="images">Images</Label>
+                <div className="grid grid-cols-3 gap-2">
+                  {product.images.map((image, index) => (
+                    <div
+                      key={index}
+                      className="relative overflow-hidden rounded-md"
+                    >
+                      <img
+                        src={URL.createObjectURL(image)}
+                        alt={`Image ${index + 1}`}
+                        className="object-cover"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => handleImageRemoval(index)}
+                        className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full"
+                      >
+                        <MinusIcon className="h-4 w-4" />
+                      </button>
+                    </div>
+                  ))}
+                  <label
+                    htmlFor="image-upload"
+                    className="flex aspect-square items-center justify-center rounded-md border-2 border-dashed border-muted-foreground cursor-pointer"
+                  >
+                    <PlusIcon className="h-6 w-6 text-muted-foreground" />
+                    <input
+                      id="image-upload"
+                      type="file"
+                      multiple
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handleImageUpload}
+                    />
+                  </label>
+                </div>
+              </div>
+              <Button type="submit" className="w-full">
+                Create Product
+              </Button>
+            </form>
+          </div>
+        </main>
+      ) : (
+        <div className="min-h-screen mx-auto">
+          <div className="flex flex-col mx-auto rounded-2xl border mt-[10rem] border-gray-300 p-10">
+            <p className="text-md">
+              Please signup or login to sell products on OLX
+            </p>
+            <Button onClick={() => navigate("/login")} className="mt-4">
+              Login
             </Button>
-          </form>
+          </div>
         </div>
-      </main>
+      )}
     </div>
   );
 }
