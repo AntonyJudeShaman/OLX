@@ -12,6 +12,7 @@ import {
   CardTitle,
 } from "./ui/card";
 import { Input } from "./ui/input";
+import { useAuth } from "../lib/auth";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -20,27 +21,30 @@ const Login = () => {
     email: "",
     password: "",
   });
-  const [errorMessage, setErrorerrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = () => {
     setLoading(true);
     if (!values.email || !values.password) {
-      setErrorerrorMessage("Please fill all fields");
+      setErrorMessage("Please fill all fields");
       return;
     } else {
-      setErrorerrorMessage("");
+      setErrorMessage("");
+      setLoading(true);
       signInWithEmailAndPassword(auth, values.email, values.password)
         .then(async () => {
           await navigate("/");
-          setLoading(false);
         })
         .catch((error) => {
-          setErrorerrorMessage(error.message);
+          setErrorMessage(error.message);
           setLoading(false);
         });
     }
-    setLoading(false);
   };
+
+  const user = useAuth();
+  console.log(user);
+  if (user?.uid) navigate("/");
 
   return (
     <div className="min-h-full">

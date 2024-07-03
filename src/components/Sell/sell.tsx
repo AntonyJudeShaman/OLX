@@ -168,7 +168,7 @@ export default function Sell() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      {user?.uid ? (
+      {user ? (
         <main className="flex-1 bg-muted/40 p-4 md:p-6">
           <div className="container mx-auto max-w-4xl">
             <h1 className="text-3xl font-bold mb-4">Create a new product</h1>

@@ -41,46 +41,51 @@ const Navbar: React.FC = () => {
       <div className="space-x-6">
         {" "}
         {user ? (
-          <DropdownMenu open={open} onOpenChange={setOpen}>
-            <DropdownMenuTrigger asChild>
-              <div className="p-0">
-                <div className="flex items-center justify-center text-sm font-bold bg-gray-700 hover:border-green-500 border text-white uppercase rounded-full select-none size-10 shrink-0">
-                  {user?.displayName?.[0].toLocaleUpperCase()}
+          <div className="flex items-center space-x-6">
+            <Link to="/sell">
+              <Button className="bg-green-600 px-8 text-md">Sell</Button>
+            </Link>
+            <DropdownMenu open={open} onOpenChange={setOpen}>
+              <DropdownMenuTrigger asChild>
+                <div className="p-0">
+                  <div className="flex items-center justify-center text-sm font-bold bg-gray-700 hover:border-green-500 border text-white uppercase rounded-full select-none size-10 shrink-0">
+                    {user?.displayName?.[0].toLocaleUpperCase()}
+                  </div>
                 </div>
-              </div>
-            </DropdownMenuTrigger>
+              </DropdownMenuTrigger>
 
-            <DropdownMenuContent
-              sideOffset={10}
-              align="start"
-              className="w-[250px] lg:w-[220px] border border-gray-400 p-2 rounded-2xl mr-3"
-              onMouseLeave={() => setOpen(false)}
-            >
-              <DropdownMenuItem className="flex text-sm h-8 rounded-lg items-center">
-                {user?.displayName}
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <Link to="/profile">
-                <DropdownMenuItem className="flex text-sm h-8 rounded-lg items-center cursor-pointer">
-                  <User className="size-5 mr-2" />
-                  Profile
+              <DropdownMenuContent
+                sideOffset={10}
+                align="start"
+                className="w-[250px] lg:w-[220px] border border-gray-400 p-2 rounded-2xl mr-3"
+                onMouseLeave={() => setOpen(false)}
+              >
+                <DropdownMenuItem className="flex text-sm h-8 rounded-lg items-center">
+                  {user?.displayName}
                 </DropdownMenuItem>
-              </Link>
-              <DropdownMenuSeparator />
-              <Link to="/settings">
-                <DropdownMenuItem className="flex text-sm h-8 rounded-lg items-center cursor-pointer">
-                  <Settings className="size-5 mr-2" />
-                  Settings
+                <DropdownMenuSeparator />
+                <Link to="/profile">
+                  <DropdownMenuItem className="flex text-sm h-8 rounded-lg items-center cursor-pointer">
+                    <User className="size-5 mr-2" />
+                    Profile
+                  </DropdownMenuItem>
+                </Link>
+                <DropdownMenuSeparator />
+                <Link to="/settings">
+                  <DropdownMenuItem className="flex text-sm h-8 rounded-lg items-center cursor-pointer">
+                    <Settings className="size-5 mr-2" />
+                    Settings
+                  </DropdownMenuItem>
+                </Link>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className="text-sm h-8 flex items-center rounded-lg cursor-pointer">
+                  <Button className="w-full" onClick={() => signout()}>
+                    Logout
+                  </Button>
                 </DropdownMenuItem>
-              </Link>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-sm h-8 flex items-center rounded-lg cursor-pointer">
-                <Button className="w-full" onClick={() => signout()}>
-                  Logout
-                </Button>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         ) : (
           <>
             <Link to={"/Signup"}>

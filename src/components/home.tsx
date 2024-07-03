@@ -7,7 +7,7 @@ const Home = () => {
     <div className="bg-gray-100 min-h-screen">
       <main className="container mx-auto min-h-full px-4 py-8">
         <section className="">
-          <ul className="flex gap-4 justify-between w-1/2">
+          <ul className="gap-4 grid grid-cols-3 md:grid-cols-5 bg-gray-400 md:bg-transparent rounded-2xl p-4">
             <li>
               <Link
                 to="/category/electronics"

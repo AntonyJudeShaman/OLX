@@ -13,10 +13,15 @@ interface Item {
 
 interface Props {
   category: string;
+  currentItemId?: string;
   className?: string;
 }
 
-const SimilarProducts: React.FC<Props> = ({ category, className }) => {
+const SimilarProducts: React.FC<Props> = ({
+  category,
+  className,
+  currentItemId,
+}) => {
   const [items, setItems] = useState<Item[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -31,7 +36,12 @@ const SimilarProducts: React.FC<Props> = ({ category, className }) => {
           throw new Error("Failed to fetch items");
         }
         const data = await response.json();
-        setItems(data);
+        if (currentItemId) {
+          const filteredItems = data.filter((item: Item) => {
+            return item._id !== currentItemId;
+          });
+          setItems(filteredItems);
+        } else setItems(data);
         setLoading(false);
       } catch (error) {
         setLoading(false);

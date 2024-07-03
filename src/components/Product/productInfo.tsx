@@ -45,6 +45,10 @@ const ProductInfo = () => {
         const data: Product = await res.json();
         setProduct(data);
         setMainImage(data.images[0]);
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
       } catch (error) {
         console.error("Error fetching product:", error);
       }
@@ -75,7 +79,7 @@ const ProductInfo = () => {
   return (
     <>
       {" "}
-      {product.userId && user.name && user.phone && (
+      {product.userId && (
         <div className="container mx-auto py-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             <div className="flex flex-col justify-center items-center">
@@ -109,13 +113,21 @@ const ProductInfo = () => {
                   />
                 ))}
               </div>
-              {user.name && user.phone && (
+              {user && (
                 <div className="mt-10 space-y-3">
                   <p className="text-3xl font-bold tracking-tight">
                     Seller Info
                   </p>
                   <p className="text-lg">Name: {user.name}</p>
-                  <p className="text-lg">Phone no: {user.phone}</p>
+                  <p className="text-lg">
+                    {user.phone ? (
+                      `Phone no: ${user.phone}`
+                    ) : (
+                      <p className="text-red-600">
+                        Seller has no contact number
+                      </p>
+                    )}
+                  </p>
 
                   {product.userId === userSession?.uid ? (
                     <>
@@ -143,7 +155,10 @@ const ProductInfo = () => {
             <p className="text-4xl font-bold tracking-tight">
               Similar Products
             </p>
-            <SimilarProducts category={product.category} />
+            <SimilarProducts
+              category={product.category}
+              currentItemId={product._id}
+            />
           </div>
         </div>
       )}
