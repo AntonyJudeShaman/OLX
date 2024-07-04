@@ -37,6 +37,9 @@ const userSchema = new mongoose.Schema(
     phone: {
       type: Number,
     },
+    banners: {
+      type: [String],
+    },
     createdAt: {
       type: Date,
       default: Date.now,

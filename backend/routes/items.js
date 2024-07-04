@@ -85,4 +85,25 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
+router.get("/search/item", async (req, res) => {
+  try {
+    var query = req.query.id;
+    if (!query) {
+      return res.status(400).json({ error: "Query parameter is required" });
+    }
+
+    const items = await Item.find({
+      $or: [
+        { title: { $regex: query, $options: "i" } },
+        { description: { $regex: query, $options: "i" } },
+        { category: { $regex: query, $options: "i" } },
+      ],
+    });
+
+    res.status(200).json(items);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;

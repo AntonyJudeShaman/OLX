@@ -19,3 +19,21 @@ export const hashPassword = async (pswd: string) => {
   );
   return getStringFromBuffer(hashedPasswordBuffer);
 };
+
+export const isNewProduct = (createdAt: string) => {
+  const now = new Date();
+  const createdDate = new Date(createdAt);
+  const diffTime = Math.abs(now.getTime() - createdDate.getTime());
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  return diffDays <= 3;
+};
+
+export function debounce(func: (...args: any[]) => void, delay: number) {
+  let timeoutId: NodeJS.Timeout;
+  return (...args: any[]) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+      func(...args);
+    }, delay);
+  };
+}

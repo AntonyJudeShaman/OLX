@@ -1,8 +1,20 @@
-import { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselPrevious,
+  CarouselNext,
+} from "../ui/carousel";
+import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
-import SimilarProducts from "./similarproducts";
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
+import { Link, useParams } from "react-router-dom";
 import { auth } from "../../lib/firebase";
+import { User } from "../../lib/auth";
+import SimilarProducts from "./similarproducts";
+import { isNewProduct } from "../../lib/utils";
 
 interface Product {
   _id?: string;
@@ -12,23 +24,18 @@ interface Product {
   price: number;
   category: string;
   images: string[];
+  createdAt: string;
 }
 
-interface User {
-  id?: string;
-  name: string;
-  phone: string;
-}
-
-const ProductInfo = () => {
+export default function ProductInfo() {
   const [product, setProduct] = useState<Product>({
     title: "",
     description: "",
     price: 0,
     category: "",
     images: [],
+    createdAt: "",
   });
-  const [mainImage, setMainImage] = useState<string>("");
   const [user, setUser] = useState<User>({ name: "", phone: "" });
 
   let { id } = useParams<{ id: string }>();
@@ -44,7 +51,6 @@ const ProductInfo = () => {
         }
         const data: Product = await res.json();
         setProduct(data);
-        setMainImage(data.images[0]);
         window.scrollTo({
           top: 0,
           behavior: "smooth",
@@ -77,93 +83,125 @@ const ProductInfo = () => {
   }, [product]);
 
   return (
-    <>
-      {" "}
-      {product.userId && (
-        <div className="container mx-auto py-12">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            <div className="flex flex-col justify-center items-center">
-              <img
-                src={mainImage}
-                alt={product.title}
-                className="rounded-2xl shadow-lg object-cover w-full"
-              />
-            </div>
-            <div className="flex flex-col justify-center">
-              <h1 className="text-5xl font-bold tracking-tighter mb-4">
-                {product.title}
+    <div className="w-full">
+      {product && (
+        <section className="w-full py-12 md:py-24 lg:py-32 z-40">
+          <div className="container grid grid-cols-1 md:grid-cols-2 gap-8 px-4 md:px-6">
+            <Carousel
+              opts={{
+                align: "start",
+                loop: true,
+              }}
+              className="rounded-lg overflow-hidden group"
+            >
+              <CarouselContent>
+                {product.images.map((image) => (
+                  <CarouselItem>
+                    <img
+                      src={image}
+                      alt="Product Image"
+                      width={600}
+                      height={600}
+                      className="w-full h-[400px] md:h-[600px] object-cover"
+                    />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="absolute opacity-0 group-hover:opacity-100 top-1/2 left-4 -translate-y-1/2 z-10 bg-background/50 hover:bg-background/75 rounded-full p-2 transition-colors">
+                <ChevronLeftIcon className="w-6 h-6 text-foreground" />
+              </CarouselPrevious>
+              <CarouselNext className="absolute opacity-0 group-hover:opacity-100 top-1/2 right-4 -translate-y-1/2 z-10 bg-background/50 hover:bg-background/75 rounded-full p-2 transition-colors">
+                <ChevronRightIcon className="w-6 h-6 text-foreground" />
+              </CarouselNext>
+            </Carousel>
+            <div className="space-y-8">
+              <div className="flex items-center gap-2">
+                <Link to={`/category/${product.category}`}>
+                  <Badge
+                    variant="outline"
+                    className="text-md bg-black text-white"
+                  >
+                    {product.category.charAt(0).toUpperCase() +
+                      product.category.slice(1)}
+                  </Badge>
+                </Link>
+              </div>
+              <h1 className="text-3xl items-start flex sm:text-5xl font-bold tracking-tight">
+                <p className="flex justify-start items-center">
+                  {product.title}
+                  {isNewProduct(product.createdAt) && (
+                    <Badge className="mt-2 ml-3 text-sm font-semibold">
+                      New
+                    </Badge>
+                  )}
+                </p>
               </h1>
-              <p className="text-muted-foreground text-xl mb-4">
+              <p className="text-muted-foreground flex items-start text-lg">
                 {product.description}
               </p>
-              <p className="text-sm text-muted-foreground mb-4">
-                Category:{" "}
-                {product.category.charAt(0).toUpperCase() +
-                  product.category.slice(1)}
-              </p>
-              <p className="text-lg font-semibold mb-4">₹ {product.price}</p>
-              <div className="grid grid-cols-3 gap-4">
-                {product.images.map((image, index) => (
-                  <img
-                    onClick={() => setMainImage(image)}
-                    key={index}
-                    src={image}
-                    alt={`${product.title} - Image ${index + 1}`}
-                    className="rounded-2xl shadow-lg object-cover w-full cursor-pointer hover:opacity-80 transition-opacity duration-300 ease-in-out"
-                  />
-                ))}
+              <div className="flex items-center gap-4">
+                <span className="text-4xl font-bold">₹{product.price}</span>
               </div>
-              {user && (
-                <div className="mt-10 space-y-3">
-                  <p className="text-3xl font-bold tracking-tight">
-                    Seller Info
-                  </p>
-                  <p className="text-lg">Name: {user.name}</p>
-                  <p className="text-lg">
-                    {user.phone ? (
-                      `Phone no: ${user.phone}`
-                    ) : (
-                      <p className="text-red-600">
-                        Seller has no contact number
+              <div className="flex md:flex-row flex-col md:items-center justify-between gap-4">
+                <div className="grid gap-1">
+                  <h3 className="font-semibold">Sold by:</h3>
+                  <div className="flex items-center gap-2">
+                    <Avatar className="size-10 border">
+                      <AvatarImage src={user?.profilePicture} />
+                      <AvatarFallback
+                        className={
+                          user.profilePicture ? "" : "bg-gray-700 text-white"
+                        }
+                      >
+                        {user.profilePicture
+                          ? user.profilePicture
+                          : user?.username?.[0].toLocaleUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <p className="font-medium">{user.username}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {user.phone}
                       </p>
-                    )}
-                  </p>
-
-                  {product.userId === userSession?.uid ? (
-                    <>
-                      {" "}
-                      <Link to={`/edit-item/${product._id}`}>
-                        <Button className="text-md mt-3" size="lg">
-                          Edit Product
-                        </Button>
-                      </Link>
-                    </>
-                  ) : (
+                    </div>
+                  </div>
+                </div>
+                <Link
+                  to={`/chat/${product._id}/${userSession?.uid}/${product.userId}`}
+                  className="z-30"
+                >
+                  {product.userId !== userSession?.uid ? (
                     <Link
                       to={`/chat/${product._id}/${userSession?.uid}/${product.userId}`}
+                      className="z-30"
                     >
-                      <Button className="text-md mt-3" size="lg">
+                      <Button
+                        size="lg"
+                        className="text-sm md:text-md items-center flex"
+                      >
                         Message Seller
                       </Button>
                     </Link>
+                  ) : (
+                    <Link to={`/edit-item/${product._id}`} className="z-30">
+                      <Button
+                        size="lg"
+                        className="text-sm md:text-md items-center flex"
+                      >
+                        Edit Product
+                      </Button>
+                    </Link>
                   )}
-                </div>
-              )}
+                </Link>
+              </div>
             </div>
           </div>
-          <div>
-            <p className="text-4xl font-bold tracking-tight">
-              Similar Products
-            </p>
-            <SimilarProducts
-              category={product.category}
-              currentItemId={product._id}
-            />
-          </div>
-        </div>
+        </section>
       )}
-    </>
+      <div className="container">
+        <p className="text-4xl font-bold tracking-tight">Similar Products</p>
+        <SimilarProducts category={product.category} />
+      </div>
+    </div>
   );
-};
-
-export default ProductInfo;
+}

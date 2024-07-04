@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import MyToast from "../ui/my-toast";
 import { Button } from "../ui/button";
+import { useAuth } from "../../lib/auth";
+import Logout from "../logout";
 
 interface Item {
   _id: string;
@@ -13,21 +15,18 @@ interface Item {
   userId: string;
 }
 
-interface Props {
-  userId: string;
-}
-
-const YourProducts: React.FC<Props> = ({ userId }) => {
+const YourProducts = () => {
   const [items, setItems] = useState<Item[]>([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const user = useAuth();
 
   useEffect(() => {
     const fetchItemsByUser = async () => {
       setLoading(true);
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/items/user/${userId}`
+          `${import.meta.env.VITE_API_URL}/items/user/${user?.uid}`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch items");
@@ -42,7 +41,7 @@ const YourProducts: React.FC<Props> = ({ userId }) => {
     };
 
     fetchItemsByUser();
-  }, [userId]);
+  }, [user?.uid]);
 
   const handleDelete = async (itemId: string) => {
     try {
@@ -76,16 +75,27 @@ const YourProducts: React.FC<Props> = ({ userId }) => {
     <div className="container mx-auto py-12">
       {!loading && items.length === 0 ? (
         <div className="border border-red-400 bg-red-200 rounded-2xl p-10 mx-auto">
-          <p className="text-center text-xl text-red-800 font-bold">
-            You have no products. You can create a new product by clicking on
-            the button below.
-          </p>
-          <Button
-            onClick={() => navigate("/sell")}
-            className="mt-4 mx-auto flex"
-          >
-            Create new product
-          </Button>
+          {user?.userType === "seller" ? (
+            <>
+              <p className="text-center text-xl text-red-800 font-bold">
+                You have no products. You can create a new product by clicking
+                on the button below.
+              </p>
+              <Button
+                onClick={() => navigate("/sell")}
+                className="mt-4 mx-auto flex"
+              >
+                Create new product
+              </Button>
+            </>
+          ) : (
+            <div className="flex flex-col items-center">
+              <p className="text-center text-xl mb-4 text-red-800 font-bold">
+                Please sign up as a seller to create products.
+              </p>
+              <Logout />
+            </div>
+          )}
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

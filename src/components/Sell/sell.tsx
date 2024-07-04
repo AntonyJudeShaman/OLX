@@ -34,6 +34,8 @@ export default function Sell() {
     images: [],
   });
 
+  const [loading, setLoading] = useState(false);
+
   const user = auth.currentUser;
 
   const handleInputChange = (
@@ -91,6 +93,7 @@ export default function Sell() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
+      setLoading(true);
       if (product.images.length === 0) {
         MyToast({ message: "Please upload at least one image", type: "error" });
         return;
@@ -153,14 +156,15 @@ export default function Sell() {
           category: "",
           images: [],
         });
-        console.log("New product:", await uploadProductToDB.json());
+        setLoading(false);
       } else {
-        throw new Error("Error creating product");
+        setLoading(false);
+        MyToast({ message: "Cannot create product", type: "error" });
       }
     } catch (error) {
       toast.dismiss();
+      setLoading(false);
       MyToast({ message: "Cannot create product", type: "error" });
-      console.error("Error creating product:", error);
     }
   };
 
