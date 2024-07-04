@@ -272,7 +272,7 @@ export default function Sell() {
                   </label>
                 </div>
               </div>
-              <Button type="submit" className="w-full">
+              <Button type="submit" className="w-full" disabled={loading}>
                 Create Product
               </Button>
             </form>

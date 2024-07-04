@@ -21,7 +21,7 @@ import {
   TableBody,
   TableCell,
 } from "../ui/table";
-import { Pencil, PlusIcon, SearchIcon } from "lucide-react";
+import { Pencil, SearchIcon } from "lucide-react";
 import { redirect } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
 import { User, useAuth } from "../../lib/auth";
