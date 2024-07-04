@@ -1,5 +1,4 @@
 import YourProducts from "./Product/yourproducts";
-import { useAuth } from "../lib/auth";
 
 function UserProfile() {
   return (
