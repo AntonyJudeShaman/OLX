@@ -17,7 +17,9 @@ export default function Banner() {
     const fetchAdmin = async () => {
       try {
         const adminRes = await fetch(
-          `http://localhost:10000/api/users/PNfwuvaBe0c28FJQmnPyrRX4Ao43`
+          `${import.meta.env.VITE_API_URL}/users/${
+            import.meta.env.VITE_ADMIN_ID
+          }`
         );
         if (!adminRes.ok) {
           throw new Error("Failed to fetch user details2");

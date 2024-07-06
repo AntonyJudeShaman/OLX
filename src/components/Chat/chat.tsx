@@ -40,7 +40,7 @@ const Chat: React.FC = () => {
 
   const navigate = useNavigate();
 
-  const socket: Socket = io(`http://localhost:10000/`, {
+  const socket: Socket = io(`${import.meta.env.VITE_API_URLL}`, {
     transports: ["websocket"],
     reconnection: true,
   });
