@@ -37,3 +37,23 @@ export function debounce(func: (...args: any[]) => void, delay: number) {
     }, delay);
   };
 }
+
+export function formatDate(dateString: string): string {
+  const dt = new Date(dateString);
+
+  const days = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+
+  const day = days[dt.getUTCDay()];
+  const hours = dt.getUTCHours().toString().padStart(2, "0");
+  const minutes = dt.getUTCMinutes().toString().padStart(2, "0");
+
+  return `${day}, ${hours}:${minutes}`;
+}

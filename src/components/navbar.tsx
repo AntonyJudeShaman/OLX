@@ -10,8 +10,8 @@ import { Link } from "react-router-dom";
 
 export default function CategoryNav() {
   return (
-    <section className="w-full pb-8 md:pb-12 container">
-      <div className="gap-6 w-full">
+    <section className="w-full container bg-blue-300/20 flex items-center border border-gray-300 rounded-[35px] p-8">
+      <div className="gap-6 w-full flex items-center justify-center">
         <div className="grid md:container grid-cols-3 md:grid-cols-6 items-center justify-between mx-auto gap-6 md:gap-8">
           <Link
             to={"/category/clothing"}

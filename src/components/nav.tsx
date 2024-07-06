@@ -38,10 +38,10 @@ export default function MainNav() {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-background shadow-sm">
+    <header className="sticky top-0 z-50 w-full bg-blue-600 shadow-sm">
       <div className="container flex items-center justify-between h-16 px-4 md:px-6">
         <Link to="/" className="flex items-center gap-2">
-          <span className="text-lg font-semibold">OLX</span>
+          <span className="text-lg font-semibold text-white">OLX</span>
         </Link>
         <div className="relative flex-1 max-w-md mx-4">
           <div className="absolute inset-y-0 left-0 flex items-center hover:bg-orange-500 pl-3 pointer-events-none">

@@ -171,11 +171,13 @@ export default function Sell() {
   const navigate = useNavigate();
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen rounded-2xl">
       {user ? (
-        <main className="flex-1 bg-muted/40 p-4 md:p-6">
-          <div className="container mx-auto max-w-4xl">
-            <h1 className="text-3xl font-bold mb-4">Create a new product</h1>
+        <main className="flex-1 bg-muted/40 p-4 md:p-6 rounded-2xl">
+          <div className=" mx-auto max-w-4xl bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+            <h1 className="text-3xl font-bold mb-4 tracking-tighter text-center text-primary">
+              Create a New Product
+            </h1>
             <form onSubmit={handleSubmit} className="grid gap-4">
               <div className="grid gap-2">
                 <Label htmlFor="title">Title</Label>
@@ -186,6 +188,7 @@ export default function Sell() {
                   value={product.title}
                   onChange={handleInputChange}
                   required
+                  className="input-primary"
                 />
               </div>
               <div className="grid gap-2">
@@ -196,7 +199,7 @@ export default function Sell() {
                   value={product.description}
                   onChange={handleInputChange}
                   required
-                  className="min-h-[100px]"
+                  className="min-h-[100px] textarea-primary"
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
@@ -209,6 +212,7 @@ export default function Sell() {
                     value={product.price}
                     onChange={handleInputChange}
                     required
+                    className="input-primary"
                   />
                 </div>
                 <div className="grid gap-2">
@@ -219,7 +223,7 @@ export default function Sell() {
                     required
                     onValueChange={handleSelectInputChange}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger className="select-primary">
                       <SelectValue placeholder="Select a category" />
                     </SelectTrigger>
                     <SelectContent>
@@ -245,7 +249,7 @@ export default function Sell() {
                       <img
                         src={URL.createObjectURL(image)}
                         alt={`Image ${index + 1}`}
-                        className="object-cover"
+                        className="object-cover w-full h-full"
                       />
                       <button
                         type="button"
@@ -272,17 +276,21 @@ export default function Sell() {
                   </label>
                 </div>
               </div>
-              <Button type="submit" className="w-full" disabled={loading}>
-                Create Product
+              <Button
+                type="submit"
+                className="w-full bg-primary text-white hover:bg-primary-dark"
+                disabled={loading}
+              >
+                {loading ? "Creating..." : "Create Product"}
               </Button>
             </form>
           </div>
         </main>
       ) : (
-        <div className="min-h-screen mx-auto">
-          <div className="flex flex-col mx-auto rounded-2xl border mt-[10rem] border-gray-300 p-10">
-            <p className="text-md">
-              Please signup or login to sell products on OLX
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="flex flex-col mx-auto rounded-2xl border mt-[10rem] border-gray-300 p-10 bg-white shadow-lg">
+            <p className="text-md text-center">
+              Please sign up or log in to sell products on OLX
             </p>
             <Button onClick={() => navigate("/login")} className="mt-4">
               Login

@@ -2,8 +2,12 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { io, Socket } from "socket.io-client";
 import { auth } from "../../lib/firebase";
-import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
+import { Textarea } from "../ui/textarea";
+import { SendIcon } from "lucide-react";
+import { format, isSameDay, parseISO } from "date-fns";
+import { formatDate } from "../../lib/utils";
 
 interface Message {
   senderId: string;
@@ -16,6 +20,7 @@ interface Item {
   userId?: string;
   title: string;
   price: number;
+  images?: string[];
 }
 
 interface ChatParams {
@@ -38,9 +43,10 @@ const Chat: React.FC = () => {
   const navigate = useNavigate();
 
   const socket: Socket = io(`http://localhost:10000/`, {
-    transports: ["websocket", "polling"],
+    transports: ["websocket"],
     reconnection: true,
   });
+
   useEffect(() => {
     const fetchMessages = async () => {
       try {
@@ -53,6 +59,7 @@ const Chat: React.FC = () => {
           throw new Error("Failed to fetch messages");
         }
         const data: Message[] = await res.json();
+        console.log("Messages fetched", data);
         setMessages(data);
       } catch (error) {
         console.error("Error fetching messages:", error);
@@ -67,14 +74,10 @@ const Chat: React.FC = () => {
       console.log("New messages received", newMessages);
       setMessages(newMessages);
     });
-
-    return () => {
-      socket.disconnect();
-    };
   }, [itemId, buyerId, sellerId, socket]);
 
   useEffect(() => {
-    const fetchitem = async () => {
+    const fetchItem = async () => {
       try {
         const res = await fetch(
           `${import.meta.env.VITE_API_URL}/items/${itemId}`
@@ -84,15 +87,17 @@ const Chat: React.FC = () => {
         }
         const data = await res.json();
         setItem(data);
+        console.log("Item fetched", data);
       } catch (error) {
         console.error("Error fetching item:", error);
       }
     };
 
-    fetchitem();
+    fetchItem();
   }, []);
 
-  const handleSendMessage = async () => {
+  const handleSendMessage = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (userSession) {
       console.log("Sending message", newMessage);
       socket.emit(
@@ -111,49 +116,101 @@ const Chat: React.FC = () => {
       setNewMessage("");
     }
   };
+  const groupMessagesByDay = (messages: Message[]) => {
+    const grouped = messages.reduce((acc, message) => {
+      const date = format(parseISO(message.timestamp), "yyyy-MM-dd");
+      if (!acc[date]) {
+        acc[date] = [];
+      }
+      acc[date].push(message);
+      return acc;
+    }, {} as Record<string, Message[]>);
+
+    return Object.entries(grouped).map(([date, messages]) => ({
+      date,
+      messages,
+    }));
+  };
+
+  const renderMessage = (msg: Message, userSession: any) => (
+    <div
+      key={msg.timestamp}
+      className={`flex ${
+        msg.senderId === userSession?.uid ? "justify-end" : "justify-start"
+      } mb-4`}
+    >
+      <div
+        className={`flex flex-col max-w-[70%] ${
+          msg.senderId === userSession?.uid ? "items-end" : "items-start"
+        }`}
+      >
+        <div
+          className={`p-3 rounded-xl ${
+            msg.senderId === userSession?.uid
+              ? "bg-primary text-white"
+              : "bg-gray-300 text-gray-700"
+          }`}
+        >
+          {msg.message}
+        </div>
+        <div className="text-xs text-gray-500 mt-1">
+          {format(parseISO(msg.timestamp), "p")}
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <div className="container mx-auto py-12">
       {userSession ? (
-        <>
-          <h1 className="text-5xl mb-2 font-bold tracking-tighter">
-            Chat for {item.title}
-          </h1>
-          <p className="text-xl mb-8 font-bold tracking-tighter">
-            Price:
-            <span className="font-normal tracking-loose"> {item.price}</span>
-          </p>
-          <div className="flex flex-col space-y-4">
-            {messages.length > 0 &&
-              messages.map((msg, index) => (
-                <div
-                  key={index}
-                  className={`message p-4 rounded-3xl ${
-                    msg.senderId === userSession?.uid
-                      ? "bg-blue-500 text-white self-end"
-                      : "bg-gray-200 text-gray-700 self-start"
-                  }`}
-                >
-                  {msg.message}
-                </div>
-              ))}
-          </div>
-          <div className="flex flex-row items-center mt-4">
-            <Input
-              type="text"
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              placeholder="Type your message..."
-              className="w-full px-4 py-2 rounded-lg border-gray-300 focus:outline-none focus:border-blue-500"
+        <div className="flex flex-col h-[80vh] bg-gray-100 rounded-2xl shadow-lg overflow-hidden">
+          <div className="flex items-center gap-4 bg-gray-300 p-4 border-b">
+            <img
+              src={item?.images?.[0]}
+              alt="Product Image"
+              width={48}
+              height={48}
+              className="rounded-md"
             />
-            <Button
-              className="ml-4 px-6 h-10 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none"
-              onClick={handleSendMessage}
-            >
-              Send
-            </Button>
+            <div className="flex-1">
+              <h2 className="font-semibold text-lg">{item.title}</h2>
+              <p className="text-sm text-gray-600">₹{item.price}</p>
+            </div>
           </div>
-        </>
+
+          <div className="flex-1 overflow-auto p-4">
+            {groupMessagesByDay(messages).map(({ date, messages }) => (
+              <div key={date}>
+                <div className="text-center text-sm text-gray-500 my-4">
+                  {format(parseISO(date), "MMMM d, yyyy")}
+                </div>
+                {messages.map((msg) => renderMessage(msg, userSession))}
+              </div>
+            ))}
+          </div>
+
+          <div className="border-t p-4">
+            <form
+              className="relative flex space-x-4"
+              onSubmit={handleSendMessage}
+            >
+              <Textarea
+                placeholder="Type your message..."
+                className="flex-1 pr-16 rounded-xl"
+                value={newMessage}
+                onChange={(e) => setNewMessage(e.target.value)}
+              />
+              <Button
+                type="submit"
+                size="icon"
+                className="absolute top-1/2 right-3 -translate-y-1/2"
+              >
+                <SendIcon className="w-5 h-5" />
+                <span className="sr-only">Send</span>
+              </Button>
+            </form>
+          </div>
+        </div>
       ) : (
         <div className="border border-red-400 bg-red-200 rounded-2xl p-10 mx-auto">
           <p className="text-center text-xl text-red-800 font-bold">
@@ -165,7 +222,7 @@ const Chat: React.FC = () => {
               className="mt-4 mx-auto flex"
             >
               Login to your account
-            </Button>{" "}
+            </Button>
             <Button
               onClick={() => navigate("/signup")}
               className="mt-4 mx-auto flex"
