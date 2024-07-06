@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { io, Socket } from "socket.io-client";
-import { auth } from "../../lib/firebase";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 import { SendIcon } from "lucide-react";
