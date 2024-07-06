@@ -1,17 +1,17 @@
 import React, { FormEvent, useEffect, useState } from "react";
-import { Avatar, AvatarImage, AvatarFallback } from "./ui/avatar";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "./ui/tabs";
-import { Label } from "./ui/label";
-import { Textarea } from "./ui/textarea";
+import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "../ui/tabs";
+import { Label } from "../ui/label";
+import { Textarea } from "../ui/textarea";
 
 import { deleteUser } from "firebase/auth";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { app, auth } from "../lib/firebase";
-import { useAuth } from "../lib/auth";
+import { app, auth } from "../../lib/firebase";
+import { useAuth } from "../../lib/auth";
 import { User } from "lucide-react";
-import MyToast from "./ui/my-toast";
+import MyToast from "../ui/my-toast";
 import toast from "react-hot-toast";
 import {
   AlertDialog,
@@ -22,7 +22,7 @@ import {
   AlertDialogFooter,
   AlertDialogCancel,
   AlertDialogAction,
-} from "./ui/alert-dialog";
+} from "../ui/alert-dialog";
 import { useNavigate } from "react-router-dom";
 
 interface Profile {
@@ -188,8 +188,8 @@ export default function UserDashboard() {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto bg-background rounded-lg shadow-lg overflow-hidden md:my-12">
-      <header className="bg-primary text-primary-foreground py-6 px-8 flex items-center justify-between">
+    <div className="w-full max-w-4xl mx-auto bg-background rounded-2xl shadow-lg overflow-hidden md:my-12">
+      <header className="bg-gray-300 text-primary-foreground py-6 px-8 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <div className="flex flex-col items-center text-center">
             <Avatar className="size-16">

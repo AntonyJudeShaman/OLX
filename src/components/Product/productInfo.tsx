@@ -157,26 +157,28 @@ export default function ProductInfo() {
               <div className="flex md:flex-row flex-col md:items-center justify-between gap-4">
                 <div className="grid gap-1">
                   <h3 className="font-semibold">Sold by:</h3>
-                  <div className="flex items-center gap-2">
-                    <Avatar className="size-10 border">
-                      <AvatarImage src={user?.profilePicture} />
-                      <AvatarFallback
-                        className={
-                          user.profilePicture ? "" : "bg-gray-700 text-white"
-                        }
-                      >
-                        {user.profilePicture
-                          ? user.profilePicture
-                          : user?.username?.[0].toLocaleUpperCase()}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <p className="font-medium">{user.username}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {user.phone}
-                      </p>
+                  <Link to={`/users/${product.userId}`}>
+                    <div className="flex items-center gap-2">
+                      <Avatar className="size-10 border">
+                        <AvatarImage src={user?.profilePicture} />
+                        <AvatarFallback
+                          className={
+                            user.profilePicture ? "" : "bg-gray-700 text-white"
+                          }
+                        >
+                          {user.profilePicture
+                            ? user.profilePicture
+                            : user?.username?.[0].toLocaleUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <p className="font-medium">{user.username}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {user.phone}
+                        </p>
+                      </div>
                     </div>
-                  </div>
+                  </Link>
                 </div>
                 <Link
                   to={`/chat/${product._id}/${userSession?.uid}/${product.userId}`}

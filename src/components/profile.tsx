@@ -1,6 +1,6 @@
 import YourProducts from "./Product/yourproducts";
 
-function UserProfile() {
+function UserProducts() {
   return (
     <div>
       <p className="container text-4xl mt-5 flex items-center justify-center tracking-tighter font-bold">
@@ -11,4 +11,4 @@ function UserProfile() {
   );
 }
 
-export default UserProfile;
+export default UserProducts;

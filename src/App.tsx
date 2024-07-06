@@ -6,13 +6,14 @@ import Sell from "./components/Sell/sell";
 import Home from "./components/home";
 import ProductInfo from "./components/Product/productInfo";
 import ProductByCategory from "./components/Product/productsbycategory";
-import UserProfile from "./components/profile";
 import EditItem from "./components/Product/editproduct";
 import Chat from "./components/Chat/chat";
 import MainNav from "./components/nav";
 import AdminDashboard from "./components/Admin/admindashboard";
 import ProductCatalog from "./components/Catalog/catalog";
 import ChatHome from "./components/Chat/chathome";
+import UserProducts from "./components/profile";
+import UserProfile from "./components/User/user-profile";
 
 function App() {
   return (
@@ -28,7 +29,8 @@ function App() {
           <Route path="/settings" element={<Settings />} />
           <Route path="/sell" element={<Sell />} />
           <Route path="/items/:id" element={<ProductInfo />} />
-          <Route path="/profile" element={<UserProfile />} />
+          <Route path="/users/:userId" element={<UserProfile />} />
+          <Route path="/profile" element={<UserProducts />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/category/:category" element={<ProductByCategory />} />
           <Route path="/explore" element={<ProductCatalog />} />

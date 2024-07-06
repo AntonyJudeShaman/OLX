@@ -1,5 +1,5 @@
 import { useAuth } from "../lib/auth";
-import UserDashboard from "./user";
+import UserDashboard from "./User/user-settings";
 
 function Settings() {
   const user = useAuth();
