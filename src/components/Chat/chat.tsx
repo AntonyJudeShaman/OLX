@@ -6,6 +6,7 @@ import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 import { SendIcon } from "lucide-react";
 import { format, parseISO } from "date-fns";
+import { useAuth } from "../../lib/auth";
 
 interface Message {
   senderId: string;
@@ -32,11 +33,12 @@ const Chat: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState<string>("");
   const { itemId, buyerId, sellerId } = useParams<ChatParams>();
-  const userSession = auth.currentUser;
+  const user = useAuth();
   const [item, setItem] = useState<Item>({
     title: "",
     price: 0,
   });
+  const [loading, setLoading] = useState<boolean>(true);
 
   const navigate = useNavigate();
 
@@ -60,7 +62,7 @@ const Chat: React.FC = () => {
         console.log("Messages fetched", data);
         setMessages(data);
       } catch (error) {
-        console.error("Error fetching messages:", error);
+        setLoading(false);
       }
     };
 
@@ -85,9 +87,9 @@ const Chat: React.FC = () => {
         }
         const data = await res.json();
         setItem(data);
-        console.log("Item fetched", data);
+        setLoading(false);
       } catch (error) {
-        console.error("Error fetching item:", error);
+        setLoading(false);
       }
     };
 
@@ -96,7 +98,7 @@ const Chat: React.FC = () => {
 
   const handleSendMessage = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (userSession) {
+    if (user) {
       console.log("Sending message", newMessage);
       socket.emit(
         "sendMessage",
@@ -104,7 +106,7 @@ const Chat: React.FC = () => {
           itemId,
           buyerId,
           sellerId,
-          senderId: userSession.uid,
+          senderId: user.uid,
           message: newMessage,
         },
         () => {
@@ -130,21 +132,21 @@ const Chat: React.FC = () => {
     }));
   };
 
-  const renderMessage = (msg: Message, userSession: any) => (
+  const renderMessage = (msg: Message, user: any) => (
     <div
       key={msg.timestamp}
       className={`flex ${
-        msg.senderId === userSession?.uid ? "justify-end" : "justify-start"
+        msg.senderId === user?.uid ? "justify-end" : "justify-start"
       } mb-4`}
     >
       <div
         className={`flex flex-col max-w-[70%] ${
-          msg.senderId === userSession?.uid ? "items-end" : "items-start"
+          msg.senderId === user?.uid ? "items-end" : "items-start"
         }`}
       >
         <div
           className={`p-3 rounded-xl ${
-            msg.senderId === userSession?.uid
+            msg.senderId === user?.uid
               ? "bg-primary text-white"
               : "bg-gray-300 text-gray-700"
           }`}
@@ -158,9 +160,19 @@ const Chat: React.FC = () => {
     </div>
   );
 
+  if (loading || !user?.uid) {
+    return (
+      <div className="container mt-12 p-10 mx-auto">
+        <p className="text-center text-xl text-green-800 font-bold">
+          Loading Please wait...
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="md:container w-full mx-auto py-12">
-      {userSession ? (
+      {user ? (
         <div className="flex flex-col h-[80vh] bg-gray-100 md:rounded-2xl shadow-lg overflow-hidden">
           <div className="flex items-center gap-4 bg-gray-300 p-4 border-b">
             <img
@@ -182,7 +194,7 @@ const Chat: React.FC = () => {
                 <div className="text-center text-sm text-gray-500 my-4">
                   {format(parseISO(date), "MMMM d, yyyy")}
                 </div>
-                {messages.map((msg) => renderMessage(msg, userSession))}
+                {messages.map((msg) => renderMessage(msg, user))}
               </div>
             ))}
           </div>

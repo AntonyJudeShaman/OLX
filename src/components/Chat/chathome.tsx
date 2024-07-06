@@ -88,8 +88,10 @@ export default function ChatHome() {
 
   if (loading || !userSession?.uid) {
     return (
-      <div className="flex justify-center items-center text-xl w-full mx-auto py-12">
-        Loading...
+      <div className="container mt-12 p-10 mx-auto">
+        <p className="text-center text-xl text-green-800 font-bold">
+          Loading Please wait...
+        </p>
       </div>
     );
   }

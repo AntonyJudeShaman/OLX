@@ -16,6 +16,7 @@ import { app, auth } from "../../lib/firebase";
 import toast from "react-hot-toast";
 import MyToast from "../ui/my-toast";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../lib/auth";
 
 interface Product {
   title: string;
@@ -36,7 +37,7 @@ export default function Sell() {
 
   const [loading, setLoading] = useState(false);
 
-  const user = auth.currentUser;
+  const user = useAuth();
 
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -172,7 +173,7 @@ export default function Sell() {
 
   return (
     <div className="flex flex-col min-h-screen rounded-2xl">
-      {user ? (
+      {user?.uid ? (
         <main className="flex-1 bg-muted/40 p-4 md:p-6 rounded-2xl">
           <div className=" mx-auto max-w-4xl bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
             <h1 className="text-3xl font-bold mb-4 tracking-tighter text-center text-primary">
@@ -290,7 +291,7 @@ export default function Sell() {
         <div className="min-h-screen flex items-center justify-center">
           <div className="flex flex-col mx-auto rounded-2xl border mt-[10rem] border-gray-300 p-10 bg-white shadow-lg">
             <p className="text-md text-center">
-              Please sign up or log in to sell products on OLX
+              Please sign up or log in as a seller to sell products on OLX
             </p>
             <Button onClick={() => navigate("/login")} className="mt-4">
               Login

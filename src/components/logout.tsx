@@ -3,18 +3,17 @@ import { useNavigate } from "react-router-dom";
 import { auth } from "../lib/firebase";
 import { Button } from "./ui/button";
 
-const Logout = () => {
+export const signout = () => {
   const navigate = useNavigate();
-  const signout = () => {
-    signOut(auth)
-      .then(() => {
-        navigate("/Login");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
+  signOut(auth)
+    .then(() => {
+      navigate("/Login");
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+const Logout = () => {
   return (
     <div>
       <Button onClick={signout}>Logout</Button>

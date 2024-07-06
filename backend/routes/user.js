@@ -1,5 +1,7 @@
 const express = require("express");
 const User = require("../models/user");
+const Item = require("../models/items");
+const Chat = require("../models/chat");
 const router = express.Router();
 const bcrypt = require("bcrypt");
 
@@ -57,8 +59,10 @@ router.put("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   try {
     const user = await User.findOneAndDelete({ id: req.params.id });
+    const item = await Item.findOneAndDelete({ userId: req.params.id });
     console.log(user);
-    if (!user) return res.status(404).json({ error: "User not found" });
+    if (!user || !item)
+      return res.status(404).json({ error: "User not found" });
     res.status(200).json({ message: "User deleted" });
   } catch (err) {
     res.status(500).json({ error: err.message });

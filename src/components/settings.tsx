@@ -1,10 +1,14 @@
-import ProfileForm from "./profileForm";
+import { useAuth } from "../lib/auth";
+import UserDashboard from "./user";
 
 function Settings() {
+  const user = useAuth();
   return (
-    <div className="min-h-screen">
-      <ProfileForm />
-    </div>
+    user?.uid && (
+      <div className="min-h-screen">
+        <UserDashboard />
+      </div>
+    )
   );
 }
 

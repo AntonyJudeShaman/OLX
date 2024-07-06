@@ -7,6 +7,7 @@ import {
   MessageSquareMore,
   SearchIcon,
   Settings,
+  Shield,
   User,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
@@ -127,7 +128,18 @@ export default function MainNav() {
                           Profile
                         </DropdownMenuItem>
                       </Link>
-                      <DropdownMenuSeparator />
+                      <DropdownMenuSeparator />{" "}
+                      {user.userType === "admin" && (
+                        <>
+                          <Link to="/admin">
+                            <DropdownMenuItem className="flex text-sm h-8 rounded-lg items-center cursor-pointer">
+                              <Shield className="size-5 mr-2" />
+                              Admin
+                            </DropdownMenuItem>
+                          </Link>
+                          <DropdownMenuSeparator />
+                        </>
+                      )}
                       <Link to="/chat">
                         <DropdownMenuItem className="flex text-sm h-8 rounded-lg items-center cursor-pointer">
                           <MessageSquareMore className="size-5 mr-2" />
