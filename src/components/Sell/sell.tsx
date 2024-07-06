@@ -12,7 +12,7 @@ import {
 } from "../ui/select";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { MinusIcon, PlusIcon } from "lucide-react";
-import { app, auth } from "../../lib/firebase";
+import { app } from "../../lib/firebase";
 import toast from "react-hot-toast";
 import MyToast from "../ui/my-toast";
 import { useNavigate } from "react-router-dom";

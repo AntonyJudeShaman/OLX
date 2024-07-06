@@ -3,7 +3,6 @@ import { Button } from "./ui/button";
 import { Sheet, SheetTrigger, SheetContent } from "./ui/sheet";
 import {
   MenuIcon,
-  MessageSquare,
   MessageSquareMore,
   SearchIcon,
   Settings,

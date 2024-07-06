@@ -11,7 +11,6 @@ import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
 import { Link, useParams } from "react-router-dom";
-import { auth } from "../../lib/firebase";
 import { useAuth, User } from "../../lib/auth";
 import SimilarProducts from "./similarproducts";
 import { isNewProduct } from "../../lib/utils";

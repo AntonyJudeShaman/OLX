@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
 import { User, Mail, MapPin, Phone } from "lucide-react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { format, parseISO } from "date-fns";
 
 interface Profile {
@@ -18,9 +18,7 @@ interface Profile {
 
 export default function UserProfile() {
   const [profileData, setProfileData] = useState<Profile | null>(null);
-  const [error, setError] = useState<string | null>(null);
   const { userId } = useParams<{ userId: string }>();
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -42,9 +40,7 @@ export default function UserProfile() {
 
         const userData = await response.json();
         setProfileData(userData);
-      } catch (error) {
-        setError("Failed to load user profile. Please try again later.");
-      }
+      } catch (error) {}
     };
 
     fetchProfile();
