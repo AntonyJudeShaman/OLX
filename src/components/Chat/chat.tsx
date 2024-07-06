@@ -3,11 +3,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import { io, Socket } from "socket.io-client";
 import { auth } from "../../lib/firebase";
 import { Button } from "../ui/button";
-import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
 import { Textarea } from "../ui/textarea";
 import { SendIcon } from "lucide-react";
-import { format, isSameDay, parseISO } from "date-fns";
-import { formatDate } from "../../lib/utils";
+import { format, parseISO } from "date-fns";
 
 interface Message {
   senderId: string;
