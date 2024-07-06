@@ -12,6 +12,7 @@ import Chat from "./components/Chat/chat";
 import MainNav from "./components/nav";
 import AdminDashboard from "./components/Admin/admindashboard";
 import ProductCatalog from "./components/Catalog/catalog";
+import ChatHome from "./components/Chat/chathome";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
           <Route path="/category/:category" element={<ProductByCategory />} />
           <Route path="/explore" element={<ProductCatalog />} />
           <Route path="/edit-item/:itemId" element={<EditItem />} />
+          <Route path="/chat" element={<ChatHome />} />
           <Route path="/chat/:itemId/:buyerId/:sellerId" element={<Chat />} />
           <Route path="/" element={<Home />} />
         </Routes>

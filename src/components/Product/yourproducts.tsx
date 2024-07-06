@@ -61,7 +61,7 @@ const YourProducts = () => {
     }
   };
 
-  if (loading) {
+  if (loading || !user?.uid) {
     return (
       <div className="container mt-12 p-10 mx-auto">
         <p className="text-center text-xl text-green-800 font-bold">

@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
 import { Link, useParams } from "react-router-dom";
 import { auth } from "../../lib/firebase";
-import { User } from "../../lib/auth";
+import { useAuth, User } from "../../lib/auth";
 import SimilarProducts from "./similarproducts";
 import { isNewProduct } from "../../lib/utils";
 
@@ -37,10 +37,11 @@ export default function ProductInfo() {
     createdAt: "",
   });
   const [user, setUser] = useState<User>({ name: "", phone: "" });
+  const [loading, setLoading] = useState(true);
 
   let { id } = useParams<{ id: string }>();
 
-  const userSession = auth.currentUser;
+  const userSession = useAuth();
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -51,12 +52,13 @@ export default function ProductInfo() {
         }
         const data: Product = await res.json();
         setProduct(data);
+        setLoading(false);
         window.scrollTo({
           top: 0,
           behavior: "smooth",
         });
       } catch (error) {
-        console.error("Error fetching product:", error);
+        setLoading(false);
       }
     };
 
@@ -81,6 +83,16 @@ export default function ProductInfo() {
 
     fetchUser();
   }, [product]);
+
+  if (loading && !user?.uid) {
+    return (
+      <div className="container mt-12 p-10 mx-auto">
+        <p className="text-center text-xl text-green-800 font-bold">
+          Loading Please wait...
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full">

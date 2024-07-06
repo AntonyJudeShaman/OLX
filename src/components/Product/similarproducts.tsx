@@ -49,6 +49,16 @@ const SimilarProducts: React.FC<Props> = ({ category, className }) => {
     fetchItemsByCategory();
   }, [category]);
 
+  if (loading) {
+    return (
+      <div className="container mt-12 p-10 mx-auto">
+        <p className="text-center text-xl text-green-800 font-bold">
+          Loading Please wait...
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className={cn("mx-auto w-full py-12", className)}>
       {!loading && items.length === 0 ? (
@@ -56,7 +66,7 @@ const SimilarProducts: React.FC<Props> = ({ category, className }) => {
           No products founds in this category. Please try again.
         </p>
       ) : (
-        <Products products={items} />
+        items && <Products products={items} />
       )}
     </div>
   );

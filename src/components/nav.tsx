@@ -1,7 +1,14 @@
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Sheet, SheetTrigger, SheetContent } from "./ui/sheet";
-import { MenuIcon, SearchIcon, Settings, User } from "lucide-react";
+import {
+  MenuIcon,
+  MessageSquare,
+  MessageSquareMore,
+  SearchIcon,
+  Settings,
+  User,
+} from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../lib/auth";
 import {
@@ -118,6 +125,13 @@ export default function MainNav() {
                         <DropdownMenuItem className="flex text-sm h-8 rounded-lg items-center cursor-pointer">
                           <User className="size-5 mr-2" />
                           Profile
+                        </DropdownMenuItem>
+                      </Link>
+                      <DropdownMenuSeparator />
+                      <Link to="/chat">
+                        <DropdownMenuItem className="flex text-sm h-8 rounded-lg items-center cursor-pointer">
+                          <MessageSquareMore className="size-5 mr-2" />
+                          Chat History
                         </DropdownMenuItem>
                       </Link>
                       <DropdownMenuSeparator />

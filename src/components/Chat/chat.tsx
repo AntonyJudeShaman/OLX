@@ -159,9 +159,9 @@ const Chat: React.FC = () => {
   );
 
   return (
-    <div className="container mx-auto py-12">
+    <div className="md:container w-full mx-auto py-12">
       {userSession ? (
-        <div className="flex flex-col h-[80vh] bg-gray-100 rounded-2xl shadow-lg overflow-hidden">
+        <div className="flex flex-col h-[80vh] bg-gray-100 md:rounded-2xl shadow-lg overflow-hidden">
           <div className="flex items-center gap-4 bg-gray-300 p-4 border-b">
             <img
               src={item?.images?.[0]}

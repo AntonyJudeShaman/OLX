@@ -30,4 +30,16 @@ router.post("/", async (req, res) => {
   }
 });
 
+router.get("/user/:uid", async (req, res) => {
+  const { uid } = req.params;
+  try {
+    const chats = await Chat.find({
+      $or: [{ buyerId: uid }, { sellerId: uid }],
+    });
+    res.json(chats);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;
