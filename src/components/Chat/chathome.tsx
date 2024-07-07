@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Button } from "../ui/button";
 import { format, parseISO } from "date-fns";
 import { useAuth } from "../../lib/auth";
+import { Loader2 } from "lucide-react";
 
 interface Message {
   senderId: string;
@@ -88,10 +89,8 @@ export default function ChatHome() {
 
   if (loading || !userSession?.uid) {
     return (
-      <div className="container mt-12 p-10 mx-auto">
-        <p className="text-center text-xl text-green-800 font-bold">
-          Loading Please wait...
-        </p>
+      <div className="flex justify-center items-center h-screen">
+        <Loader2 className="h-12 w-12 animate-spin text-blue-500" />
       </div>
     );
   }

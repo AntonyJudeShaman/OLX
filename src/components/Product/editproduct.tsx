@@ -5,7 +5,7 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
-import { MinusCircle, PlusCircle, Upload, X } from "lucide-react";
+import { Loader2, MinusCircle, PlusCircle, Upload, X } from "lucide-react";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { app } from "../../lib/firebase";
 import toast from "react-hot-toast";
@@ -158,7 +158,7 @@ const EditItem = () => {
   if (isLoading)
     return (
       <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
+        <Loader2 className="h-12 w-12 animate-spin text-blue-500" />
       </div>
     );
 

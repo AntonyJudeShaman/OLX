@@ -10,7 +10,7 @@ import {
   DropdownMenuRadioItem,
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
-import { FilterIcon, ListOrderedIcon } from "lucide-react";
+import { FilterIcon, ListOrderedIcon, Loader2 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { isNewProduct } from "../../lib/utils";
 import { Badge } from "../ui/badge";
@@ -27,6 +27,7 @@ interface Product {
 export default function ProductCatalog() {
   const [products, setProducts] = useState<Product[]>([]);
   const location = useLocation();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -53,8 +54,9 @@ export default function ProductCatalog() {
         );
         const data = await response.json();
         setProducts(data);
+        setLoading(false);
       } catch (error) {
-        console.error("Error fetching products:", error);
+        setLoading(false);
       }
     };
     fetchProducts();
@@ -87,8 +89,17 @@ export default function ProductCatalog() {
         return 0;
       });
     }
+    setLoading(false);
     return filtered;
   }, [products, selectedCategory, selectedPrice, sortBy]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Loader2 className="h-12 w-12 animate-spin text-blue-500" />
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-4 md:px-6 py-8">

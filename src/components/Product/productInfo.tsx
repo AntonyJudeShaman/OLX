@@ -7,13 +7,19 @@ import {
 } from "../ui/carousel";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
-import { ChevronLeftIcon, ChevronRightIcon, Heart } from "lucide-react";
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  Heart,
+  Loader2,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
 import { Link, useParams } from "react-router-dom";
 import { useAuth, User } from "../../lib/auth";
 import SimilarProducts from "./similarproducts";
 import { isNewProduct } from "../../lib/utils";
+import MyToast from "../ui/my-toast";
 
 export interface Product {
   _id?: string;
@@ -37,6 +43,7 @@ export default function ProductInfo() {
   });
   const [user, setUser] = useState<User>({ name: "", phone: "" });
   const [loading, setLoading] = useState(true);
+  const [isWishlist, setIsWishlist] = useState(false);
 
   let { id } = useParams<{ id: string }>();
 
@@ -104,6 +111,8 @@ export default function ProductInfo() {
       }
 
       const updatedUser = await res.json();
+      MyToast({ message: "Added to wishlist", type: "success" });
+      setIsWishlist(true);
       setUser(updatedUser);
     } catch (error) {
       console.error("Error adding to wishlist:", error);
@@ -112,10 +121,8 @@ export default function ProductInfo() {
 
   if (loading && !user?.uid) {
     return (
-      <div className="container mt-12 p-10 mx-auto">
-        <p className="text-center text-xl text-green-800 font-bold">
-          Loading Please wait...
-        </p>
+      <div className="flex justify-center items-center h-screen">
+        <Loader2 className="h-12 w-12 animate-spin text-blue-500" />
       </div>
     );
   }
@@ -181,7 +188,8 @@ export default function ProductInfo() {
               </>
               <div className="flex items-center justify-between gap-4">
                 <span className="text-4xl font-bold">₹{product.price}</span>
-                {userSession?.wishlistItems?.includes(product?._id!) ? (
+                {userSession?.wishlistItems?.includes(product?._id!) ||
+                isWishlist ? (
                   <Button className="flex space-x-3" size="lg" disabled>
                     <Heart />
                     <span>Already Added</span>

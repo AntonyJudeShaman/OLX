@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { HeartIcon } from "lucide-react";
+import { HeartIcon, Loader2 } from "lucide-react";
 import { Button } from "../ui/button";
 import { Product } from "./productInfo";
 import { useAuth } from "../../lib/auth";
@@ -76,10 +76,8 @@ export default function Wishlist() {
 
   if (loading || !userSession?.uid) {
     return (
-      <div className="container mt-12 p-10 mx-auto">
-        <p className="text-center text-xl text-green-800 font-bold">
-          Loading Please wait...
-        </p>
+      <div className="flex justify-center items-center h-screen">
+        <Loader2 className="h-12 w-12 animate-spin text-blue-500" />
       </div>
     );
   }

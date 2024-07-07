@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
-import { User, Mail, MapPin, Phone } from "lucide-react";
+import { User, Mail, MapPin, Phone, Loader2 } from "lucide-react";
 import { useParams, Link } from "react-router-dom";
 import { format, parseISO } from "date-fns";
 
@@ -48,10 +48,8 @@ export default function UserProfile() {
 
   if (!profileData) {
     return (
-      <div className="container mt-12 p-10 mx-auto">
-        <p className="text-center text-xl text-green-800 font-bold">
-          Loading Please wait...
-        </p>
+      <div className="flex justify-center items-center h-screen">
+        <Loader2 className="h-12 w-12 animate-spin text-blue-500" />
       </div>
     );
   }

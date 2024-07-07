@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { cn } from "../../lib/utils";
 import Products from "./product";
+import { Loader2 } from "lucide-react";
 
 interface Item {
   _id: string;
@@ -51,10 +52,8 @@ const SimilarProducts: React.FC<Props> = ({ category, className }) => {
 
   if (loading) {
     return (
-      <div className="container mt-12 p-10 mx-auto">
-        <p className="text-center text-xl text-green-800 font-bold">
-          Loading Please wait...
-        </p>
+      <div className="flex justify-center items-center h-screen">
+        <Loader2 className="h-12 w-12 animate-spin text-blue-500" />
       </div>
     );
   }

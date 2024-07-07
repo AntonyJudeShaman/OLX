@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { io, Socket } from "socket.io-client";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
-import { SendIcon } from "lucide-react";
+import { Loader2, SendIcon } from "lucide-react";
 import { format, parseISO } from "date-fns";
 import { useAuth } from "../../lib/auth";
 
@@ -161,10 +161,8 @@ const Chat: React.FC = () => {
 
   if (loading || !user?.uid) {
     return (
-      <div className="container mt-12 p-10 mx-auto">
-        <p className="text-center text-xl text-green-800 font-bold">
-          Loading Please wait...
-        </p>
+      <div className="flex justify-center items-center h-screen">
+        <Loader2 className="h-12 w-12 animate-spin text-blue-500" />
       </div>
     );
   }

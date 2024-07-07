@@ -11,7 +11,7 @@ import {
   SelectItem,
 } from "../ui/select";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { MinusIcon, PlusIcon } from "lucide-react";
+import { Loader2, MinusIcon, PlusIcon } from "lucide-react";
 import { app } from "../../lib/firebase";
 import toast from "react-hot-toast";
 import MyToast from "../ui/my-toast";
@@ -170,6 +170,14 @@ export default function Sell() {
   };
 
   const navigate = useNavigate();
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Loader2 className="h-12 w-12 animate-spin text-blue-500" />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col min-h-screen rounded-2xl">

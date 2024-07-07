@@ -13,6 +13,7 @@ import {
 } from "./ui/card";
 import { Input } from "./ui/input";
 import { useAuth } from "../lib/auth";
+import { Loader2 } from "lucide-react";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -45,6 +46,14 @@ const Login = () => {
   const user = useAuth();
   console.log(user);
   if (user?.uid) navigate("/");
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Loader2 className="h-12 w-12 animate-spin text-blue-500" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-full">
