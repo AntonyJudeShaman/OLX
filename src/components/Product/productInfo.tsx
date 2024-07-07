@@ -152,7 +152,7 @@ export default function ProductInfo() {
                 <ChevronRightIcon className="w-6 h-6 text-foreground" />
               </CarouselNext>
             </Carousel>
-            <div className="space-y-8">
+            <div className="space-y-8 flex flex-col justify-evenly h-full">
               <div className="flex items-center gap-2">
                 <Link to={`/category/${product.category}`}>
                   <Badge
@@ -164,19 +164,21 @@ export default function ProductInfo() {
                   </Badge>
                 </Link>
               </div>
-              <h1 className="text-3xl items-start flex sm:text-5xl font-bold tracking-tight">
-                <p className="flex justify-start items-center">
-                  {product.title}
-                  {isNewProduct(product.createdAt) && (
-                    <Badge className="mt-2 ml-3 text-sm font-semibold">
-                      New
-                    </Badge>
-                  )}
+              <>
+                <h1 className="text-3xl items-start flex sm:text-5xl font-bold tracking-tight">
+                  <p className="flex justify-start items-center">
+                    {product.title}
+                    {isNewProduct(product.createdAt) && (
+                      <Badge className="mt-2 ml-3 text-sm font-semibold">
+                        New
+                      </Badge>
+                    )}
+                  </p>
+                </h1>
+                <p className="text-muted-foreground flex items-start text-lg">
+                  {product.description}
                 </p>
-              </h1>
-              <p className="text-muted-foreground flex items-start text-lg">
-                {product.description}
-              </p>
+              </>
               <div className="flex items-center justify-between gap-4">
                 <span className="text-4xl font-bold">₹{product.price}</span>
                 {userSession?.wishlistItems?.includes(product?._id!) ? (

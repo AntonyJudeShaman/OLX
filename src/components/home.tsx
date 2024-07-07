@@ -6,7 +6,7 @@ const Home = () => {
   return (
     <div className="bg-gray-100 min-h-screen">
       <Banner />
-      <div className="container md:contain-none">
+      <div className="container py-8 md:contain-none">
         {" "}
         <CategoryNav />
       </div>

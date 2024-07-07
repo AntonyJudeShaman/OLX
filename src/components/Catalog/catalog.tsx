@@ -136,8 +136,8 @@ export default function ProductCatalog() {
                 Furniture
               </DropdownMenuCheckboxItem>
               <DropdownMenuCheckboxItem
-                checked={selectedCategory === "Home"}
-                onCheckedChange={() => setSelectedCategory("Home")}
+                checked={selectedCategory === "Home Appliances"}
+                onCheckedChange={() => setSelectedCategory("Home Appliances")}
               >
                 Home
               </DropdownMenuCheckboxItem>

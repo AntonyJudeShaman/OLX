@@ -7,6 +7,7 @@ import {
   SearchIcon,
   Settings,
   Shield,
+  ShoppingBag,
   User,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
@@ -119,15 +120,8 @@ export default function MainNav() {
                     >
                       <DropdownMenuItem className="flex text-sm h-8 rounded-lg items-center">
                         {user?.username}
-                      </DropdownMenuItem>
+                      </DropdownMenuItem>{" "}
                       <DropdownMenuSeparator />
-                      <Link to="/profile">
-                        <DropdownMenuItem className="flex text-sm h-8 rounded-lg items-center cursor-pointer">
-                          <User className="size-5 mr-2" />
-                          Profile
-                        </DropdownMenuItem>
-                      </Link>
-                      <DropdownMenuSeparator />{" "}
                       {user.userType === "admin" && (
                         <>
                           <Link to="/admin">
@@ -136,9 +130,23 @@ export default function MainNav() {
                               Admin
                             </DropdownMenuItem>
                           </Link>
-                          <DropdownMenuSeparator />
                         </>
                       )}
+                      <DropdownMenuSeparator />
+                      <Link to="/profile">
+                        <DropdownMenuItem className="flex text-sm h-8 rounded-lg items-center cursor-pointer">
+                          <User className="size-5 mr-2" />
+                          Profile
+                        </DropdownMenuItem>
+                      </Link>
+                      <DropdownMenuSeparator />{" "}
+                      <Link to="/wishlist">
+                        <DropdownMenuItem className="flex text-sm h-8 rounded-lg items-center cursor-pointer">
+                          <ShoppingBag className="size-5 mr-2" />
+                          Wishlist
+                        </DropdownMenuItem>
+                      </Link>
+                      <DropdownMenuSeparator />
                       <Link to="/chat">
                         <DropdownMenuItem className="flex text-sm h-8 rounded-lg items-center cursor-pointer">
                           <MessageSquareMore className="size-5 mr-2" />

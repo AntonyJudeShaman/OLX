@@ -5,10 +5,17 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
-import { MinusIcon, PlusIcon } from "lucide-react";
+import { MinusCircle, PlusCircle, Upload, X } from "lucide-react";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { app } from "../../lib/firebase";
 import toast from "react-hot-toast";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 interface Item {
   _id: string;
@@ -18,6 +25,20 @@ interface Item {
   category: string;
   images: string[];
 }
+
+const categories = [
+  "electronics",
+  "clothing",
+  "furniture",
+  "Home Appliances",
+  "Accessories",
+  "Garden",
+  "sports",
+  "Books",
+  "Toys & Games",
+  "Beauty & Personal Care",
+  "Other",
+];
 
 const EditItem = () => {
   const { itemId } = useParams<{ itemId: string }>();
@@ -29,11 +50,13 @@ const EditItem = () => {
     category: "",
     images: [""],
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchItem = async () => {
+      setIsLoading(true);
       try {
         const response = await fetch(
           `${import.meta.env.VITE_API_URL}/items/${itemId}`
@@ -52,6 +75,8 @@ const EditItem = () => {
         });
       } catch (error) {
         MyToast({ message: "Error fetching item", type: "error" });
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -63,6 +88,10 @@ const EditItem = () => {
   ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+  };
+
+  const handleCategoryChange = (value: string) => {
+    setFormData({ ...formData, category: value });
   };
 
   const handleImageRemoval = (index: number) => {
@@ -85,19 +114,8 @@ const EditItem = () => {
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    toast.loading("Uploading images...", {
-      style: {
-        borderRadius: "10px",
-        background: "#333",
-        color: "#fff",
-        fontSize: "14px",
-      },
-      iconTheme: {
-        primary: "lightgreen",
-        secondary: "black",
-      },
-    });
     if (file) {
+      toast.loading("Uploading image...");
       try {
         const imageURL = await uploadImageToFirebase(file);
         setFormData({
@@ -115,6 +133,7 @@ const EditItem = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/items/${itemId}`,
@@ -131,120 +150,170 @@ const EditItem = () => {
       navigate(`/items/${itemId}`);
     } catch (error) {
       MyToast({ message: "Error updating item", type: "error" });
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  if (!item) return <div>Loading...</div>;
+  if (isLoading)
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+
+  if (!item)
+    return (
+      <div className="text-center text-2xl text-gray-600">Item not found</div>
+    );
 
   return (
-    <div className="container mx-auto py-12">
-      <h2 className="text-2xl font-bold mb-4">Edit Item</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <Label className="block text-sm font-medium text-gray-700">
-            Title
-          </Label>
-          <Input
-            type="text"
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
-            className="mt-1 block w-full border border-gray-300 shadow-md rounded-md"
-          />
-        </div>
-        <div>
-          <Label className="block text-sm font-medium text-gray-700">
-            Description
-          </Label>
-          <Textarea
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            className="mt-1 block w-full border border-gray-300 shadow-md rounded-md"
-          />
-        </div>
-        <div>
-          <Label className="block text-sm font-medium text-gray-700">
-            Price
-          </Label>
-          <Input
-            type="number"
-            name="price"
-            value={formData.price}
-            onChange={handleChange}
-            className="mt-1 block w-full border border-gray-300 shadow-md rounded-md"
-          />
-        </div>
-        <div>
-          <Label className="block text-sm font-medium text-gray-700">
-            Category
-          </Label>
-          <Input
-            type="text"
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-            className="mt-1 block w-full border border-gray-300 shadow-md rounded-md"
-          />
-        </div>
-        <div>
-          <Label className="block text-sm font-medium text-gray-700">
-            Add New Image
-          </Label>
-          <div className="flex space-x-4">
-            <Input
-              type="file"
-              accept="image/*"
-              onChange={handleImageUpload}
-              className="mt-1 block w-full border border-gray-300 shadow-md rounded-md"
-            />
+    <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
+      <h2 className="text-3xl font-extrabold text-gray-900 mb-8">Edit Item</h2>
+      <form onSubmit={handleSubmit} className="space-y-8">
+        <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+          <div className="sm:col-span-4">
+            <Label
+              htmlFor="title"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Title
+            </Label>
+            <div className="mt-1">
+              <Input
+                type="text"
+                name="title"
+                id="title"
+                value={formData.title}
+                onChange={handleChange}
+                className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
+              />
+            </div>
+          </div>
+
+          <div className="sm:col-span-6">
+            <Label
+              htmlFor="description"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Description
+            </Label>
+            <div className="mt-1">
+              <Textarea
+                id="description"
+                name="description"
+                rows={3}
+                value={formData.description}
+                onChange={handleChange}
+                className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border border-gray-300 rounded-md"
+              />
+            </div>
+          </div>
+
+          <div className="sm:col-span-2">
+            <Label
+              htmlFor="price"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Price
+            </Label>
+            <div className="mt-1">
+              <Input
+                type="number"
+                name="price"
+                id="price"
+                value={formData.price}
+                onChange={handleChange}
+                className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
+              />
+            </div>
+          </div>
+
+          <div className="sm:col-span-2">
+            <Label
+              htmlFor="category"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Category
+            </Label>
+            <div className="mt-1">
+              <Select
+                onValueChange={handleCategoryChange}
+                defaultValue={formData.category}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select a category" />
+                </SelectTrigger>
+                <SelectContent>
+                  {categories.map((category) => (
+                    <SelectItem key={category} value={category}>
+                      {category.charAt(0).toUpperCase() + category.slice(1)}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
         </div>
-        <div className="grid grid-cols-4 gap-4">
-          {formData.images.map((image, index) => (
-            <div key={index} className="relative">
-              <img
-                src={image}
-                alt={`${formData.title} - Image ${index + 1}`}
-                className="rounded-2xl shadow-lg object-cover w-full cursor-pointer hover:opacity-80 transition-opacity duration-300 ease-in-out"
+
+        <div>
+          <Label className="block text-sm font-medium text-gray-700 mb-2">
+            Images
+          </Label>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+            {formData.images.map((image, index) => (
+              <div key={index} className="relative group">
+                <img
+                  src={image}
+                  alt={`${formData.title} - Image ${index + 1}`}
+                  className="h-40 w-full object-cover rounded-lg shadow-md"
+                />
+                <button
+                  type="button"
+                  onClick={() => handleImageRemoval(index)}
+                  className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+            ))}
+            <label
+              htmlFor="image-upload"
+              className="flex items-center justify-center h-40 bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 cursor-pointer hover:bg-gray-50 transition-colors duration-200"
+            >
+              <div className="text-center">
+                <Upload className="mx-auto h-12 w-12 text-gray-400" />
+                <span className="mt-2 block text-sm font-medium text-gray-600">
+                  Add Image
+                </span>
+              </div>
+              <input
+                id="image-upload"
+                type="file"
+                className="hidden"
+                onChange={handleImageUpload}
+                accept="image/*"
               />
-              <button
-                type="button"
-                onClick={() => handleImageRemoval(index)}
-                className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full"
-              >
-                <MinusIcon className="h-4 w-4" />
-              </button>
-            </div>
-          ))}
-          <label
-            htmlFor="image-upload"
-            className="flex aspect-square items-center justify-center rounded-md border-2 border-dashed border-muted-foreground cursor-pointer"
-          >
-            <PlusIcon className="h-6 w-6 text-muted-foreground" />
-            <input
-              id="image-upload"
-              type="file"
-              multiple
-              accept="image/*"
-              className="hidden"
-              onChange={handleImageUpload}
-            />
-          </label>
+            </label>
+          </div>
         </div>
-        <Button
-          type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
-          Update Item
-        </Button>{" "}
-        <Button
-          type="button"
-          onClick={() => navigate(`/profile`)}
-          className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
-        >
-          Cancel
-        </Button>
+
+        <div className="flex justify-end space-x-4">
+          <Button
+            type="button"
+            onClick={() => navigate(`/profile`)}
+            className="bg-gray-200 text-gray-700 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+          >
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            className="bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            disabled={isLoading}
+          >
+            {isLoading ? "Updating..." : "Update Item"}
+          </Button>
+        </div>
       </form>
     </div>
   );

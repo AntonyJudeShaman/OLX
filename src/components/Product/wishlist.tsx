@@ -3,6 +3,7 @@ import { HeartIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import { Product } from "./productInfo";
 import { useAuth } from "../../lib/auth";
+import { Link } from "react-router-dom";
 
 interface WishlistItem extends Product {
   _id: string;
@@ -97,42 +98,45 @@ export default function Wishlist() {
         ) : (
           <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {wishlistProducts.map((product) => (
-              <div
-                key={product._id}
-                className="bg-background rounded-lg overflow-hidden shadow-sm group"
-              >
-                <div className="relative">
-                  <img
-                    src={product.images[0]}
-                    alt={product.title}
-                    className="w-full h-60 object-cover"
-                  />
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="absolute top-4 right-4 bg-transparent"
-                    onClick={() => removeFromWishlist(product._id)}
-                  >
-                    <HeartIcon className="w-5 h-5 text-red-500 fill-pink-500" />
-                    <span className="sr-only">Remove from Wishlist</span>
-                  </Button>
+              <Link to={`/items/${product._id}`}>
+                {" "}
+                <div
+                  key={product._id}
+                  className="bg-background rounded-lg overflow-hidden shadow-sm group"
+                >
+                  <div className="relative">
+                    <img
+                      src={product.images[0]}
+                      alt={product.title}
+                      className="w-full h-60 object-cover"
+                    />
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      title="Remove from Wishlist"
+                      className="absolute top-4 right-4 bg-transparent"
+                      onClick={() => removeFromWishlist(product._id)}
+                    >
+                      <HeartIcon className="w-5 h-5 text-red-500 fill-pink-500" />
+                      <span className="sr-only">Remove from Wishlist</span>
+                    </Button>
+                  </div>
+                  <div className="p-4 grid gap-2">
+                    <h3 className="font-semibold text-xl tracking-tighter">
+                      {product.title}
+                    </h3>
+                    <p className="text-sm text-muted-foreground">
+                      ₹{product.price}
+                    </p>
+                    <Button
+                      size="sm"
+                      onClick={() => removeFromWishlist(product._id)}
+                    >
+                      Remove from Wishlist
+                    </Button>
+                  </div>
                 </div>
-                <div className="p-4 grid gap-2">
-                  <h3 className="font-semibold text-xl tracking-tighter">
-                    {product.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    ₹{product.price}
-                  </p>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => removeFromWishlist(product._id)}
-                  >
-                    Remove from Wishlist
-                  </Button>
-                </div>
-              </div>
+              </Link>
             ))}
           </div>
         )}
