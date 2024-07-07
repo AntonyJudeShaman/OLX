@@ -7,7 +7,7 @@ import {
 } from "../ui/carousel";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
-import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+import { ChevronLeftIcon, ChevronRightIcon, Heart } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
 import { Link, useParams } from "react-router-dom";
@@ -15,7 +15,7 @@ import { useAuth, User } from "../../lib/auth";
 import SimilarProducts from "./similarproducts";
 import { isNewProduct } from "../../lib/utils";
 
-interface Product {
+export interface Product {
   _id?: string;
   userId?: string;
   title: string;
@@ -82,6 +82,33 @@ export default function ProductInfo() {
 
     fetchUser();
   }, [product]);
+
+  const addToWishlist = async () => {
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/users/wishlist/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: userSession?.uid,
+            itemId: product._id,
+          }),
+        }
+      );
+
+      if (!res.ok) {
+        throw new Error("Failed to add to wishlist");
+      }
+
+      const updatedUser = await res.json();
+      setUser(updatedUser);
+    } catch (error) {
+      console.error("Error adding to wishlist:", error);
+    }
+  };
 
   if (loading && !user?.uid) {
     return (
@@ -150,8 +177,23 @@ export default function ProductInfo() {
               <p className="text-muted-foreground flex items-start text-lg">
                 {product.description}
               </p>
-              <div className="flex items-center gap-4">
+              <div className="flex items-center justify-between gap-4">
                 <span className="text-4xl font-bold">₹{product.price}</span>
+                {userSession?.wishlistItems?.includes(product?._id!) ? (
+                  <Button className="flex space-x-3" size="lg" disabled>
+                    <Heart />
+                    <span>Already Added</span>
+                  </Button>
+                ) : (
+                  <Button
+                    className="flex space-x-3"
+                    size="lg"
+                    onClick={addToWishlist}
+                  >
+                    <Heart />
+                    <span>Add to wishlist</span>
+                  </Button>
+                )}
               </div>
               <div className="flex md:flex-row flex-col md:items-center justify-between gap-4">
                 <div className="grid gap-1">

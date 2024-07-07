@@ -21,6 +21,7 @@ export interface User {
   userType?: string;
   hashedPassword?: string;
   banners?: string[];
+  wishlistItems?: string[];
 }
 
 const AuthContext = createContext<User | null>(null);

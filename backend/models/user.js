@@ -40,6 +40,9 @@ const userSchema = new mongoose.Schema(
     banners: {
       type: [String],
     },
+    wishlistItems: {
+      type: [String],
+    },
     createdAt: {
       type: Date,
       default: Date.now,

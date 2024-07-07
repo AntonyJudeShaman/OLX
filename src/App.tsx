@@ -14,6 +14,7 @@ import ProductCatalog from "./components/Catalog/catalog";
 import ChatHome from "./components/Chat/chathome";
 import UserProducts from "./components/profile";
 import UserProfile from "./components/User/user-profile";
+import Wishlist from "./components/Product/wishlist";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
           <Route path="/users/:userId" element={<UserProfile />} />
           <Route path="/profile" element={<UserProducts />} />
           <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/category/:category" element={<ProductByCategory />} />
           <Route path="/explore" element={<ProductCatalog />} />
           <Route path="/edit-item/:itemId" element={<EditItem />} />

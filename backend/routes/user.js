@@ -56,6 +56,26 @@ router.put("/:id", async (req, res) => {
   }
 });
 
+router.put("/wishlist/:id", async (req, res) => {
+  try {
+    const { userId, itemId } = req.body;
+    const user = await User.findOneAndUpdate({ id: userId });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    if (!user.wishlistItems.includes(itemId)) {
+      user.wishlistItems.push(itemId);
+      await user.save();
+    }
+
+    res.status(200).json(user);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 router.delete("/:id", async (req, res) => {
   try {
     const user = await User.findOneAndDelete({ id: req.params.id });
@@ -66,6 +86,29 @@ router.delete("/:id", async (req, res) => {
     res.status(200).json({ message: "User deleted" });
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+});
+
+router.delete("/:userId/wishlist/:itemId", async (req, res) => {
+  try {
+    const { userId, itemId } = req.params;
+
+    const user = await User.findOne({ id: userId });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    user.wishlistItems = user.wishlistItems.filter(
+      (item) => item.toString() !== itemId
+    );
+
+    await user.save();
+
+    res.status(200).json({ message: "Item removed from wishlist", user });
+  } catch (err) {
+    console.error("Error removing item from wishlist:", err);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
