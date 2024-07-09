@@ -5,7 +5,7 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
-import { Loader2, MinusCircle, PlusCircle, Upload, X } from "lucide-react";
+import { Loader2, Upload, X } from "lucide-react";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { app } from "../../lib/firebase";
 import toast from "react-hot-toast";
